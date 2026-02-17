@@ -295,7 +295,7 @@
                                     <div key={m.id} className="bg-neutral-900/50 border border-green-500/30 p-8 rounded-2xl hover:border-green-400 transition-all group backdrop-blur-sm text-left">
                                         <div className="flex items-center gap-4 mb-6">
                                             <div className="w-14 h-14 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500 font-bold text-2xl font-orbitron border border-green-500/20">{m.id}</div>
-                                            <h3 className="text-2xl font-black font-orbitron group-hover:text-neon uppercase italic tracking-tighter">{m.title}</h3>
+                                            <h3 className="text-2xl font-black font-orbitron group-hover:text-neon uppercase italic tracking-tighter">${m.title}</h3>
                                         </div>
                                         <p className="text-gray-400 mb-8 font-medium">{m.desc}</p>
                                         <ul className="space-y-4 mb-8">
@@ -316,13 +316,13 @@
                             <div className="flex flex-col gap-24">
                                 {TESTIMONIALS.map(t => (
                                     <div key={t.id} className="group relative max-w-4xl mx-auto w-full">
-                                        <div className="relative bg-neutral-900/80 border-2 border-green-500/20 p-10 md:p-16 rounded-[3rem] transition-all flex flex-col items-center shadow-3xl backdrop-blur-xl hover:border-green-500/50">
+                                        <div className="relative bg-neutral-900/80 border-2 border-green-500/20 p-10 md:p-16 rounded-[3rem] transition-all flex flex-col items-center shadow-3xl backdrop-blur-xl hover:border-green-500/50 overflow-hidden">
                                             <div className="w-full mb-12 rounded-3xl overflow-hidden border-4 border-green-500/20 shadow-2xl bg-black flex items-center justify-center">
-                                                <img src={t.img} className="w-full h-auto block transform group-hover:scale-110 transition-transform duration-[3s]" />
+                                                <img src={t.img} className="w-full h-auto block transform group-hover:scale-105 transition-transform duration-[3s]" />
                                             </div>
                                             <div className="text-center">
                                                 <h4 className="font-orbitron font-black text-3xl text-green-500 uppercase italic mb-6">{t.name}</h4>
-                                                <p className="text-2xl text-gray-300 italic font-semibold max-w-2xl">"{t.text}"</p>
+                                                <p className="text-2xl text-gray-300 italic font-semibold max-w-2xl mx-auto">"{t.text}"</p>
                                             </div>
                                         </div>
                                     </div>
@@ -338,13 +338,13 @@
                                 <p className="text-gray-300 text-xl mb-12 leading-relaxed font-medium italic">Certificação oficial válida em todos os quadrantes da Federação Galáctica. Assinatura molecular inclusiva.</p>
                                 <div className="space-y-6">
                                     <div className="flex items-center gap-6 bg-black/60 p-6 rounded-2xl border-l-8 border-green-500 shadow-xl"><div className="text-green-500 text-3xl">✔</div><span className="font-black font-orbitron text-sm tracking-widest italic uppercase">Código de DNA Verificado</span></div>
-                                    <div className="flex items-center gap-6 bg-black/60 p-6 rounded-2xl border-l-8 border-green-500 shadow-xl"><div class="text-green-500 text-3xl">✔</div><span class="font-black font-orbitron text-sm tracking-widest italic uppercase">Protocolo de Paz Ativo</span></div>
+                                    <div className="flex items-center gap-6 bg-black/60 p-6 rounded-2xl border-l-8 border-green-500 shadow-xl"><div className="text-green-500 text-3xl">✔</div><span className="font-black font-orbitron text-sm tracking-widest italic uppercase">Protocolo de Paz Ativo</span></div>
                                 </div>
                             </div>
                             <div className="relative group cursor-pointer" onClick={window.downloadCert}>
                                 <div className="absolute -inset-6 bg-green-500/30 blur-[60px] opacity-0 group-hover:opacity-100 transition duration-700"></div>
                                 <div className="relative bg-neutral-900 border-8 border-green-500/50 p-6 rounded-[2rem] shadow-2xl transform transition-transform group-hover:rotate-2 group-hover:scale-105">
-                                    <img src="https://pt.quizur.com/_image?href=https%3A%2F%2Fdev-beta.quizur.com%2Fstorage%2Fv1%2Fobject%2Fpublic%2F%2Fimagens%2F%2F20146386%2F750a8375-7e7a-49a4-b92d-1829733bb9f7.png&w=600&h=600&f=webp" class="w-full rounded-xl" />
+                                    <img src="https://pt.quizur.com/_image?href=https%3A%2F%2Fdev-beta.quizur.com%2Fstorage%2Fv1%2Fobject%2Fpublic%2F%2Fimagens%2F%2F20146386%2F750a8375-7e7a-49a4-b92d-1829733bb9f7.png&w=600&h=600&f=webp" className="w-full rounded-xl" />
                                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
                                         <span className="text-green-500 font-orbitron font-black text-2xl uppercase italic drop-shadow-lg">BAIXAR ARQUIVO</span>
                                     </div>
