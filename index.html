@@ -8,21 +8,23 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --ben10-green: #22c55e;
+            --ben10-dark: #050505;
+        }
         body {
-            background-color: #050505;
+            background-color: var(--ben10-dark);
             color: #ffffff;
             font-family: 'Rajdhani', sans-serif;
             overflow-x: hidden;
         }
-        .font-orbitron {
-            font-family: 'Orbitron', sans-serif;
-        }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
         .text-neon {
-            color: #22c55e;
+            color: var(--ben10-green);
             text-shadow: 0 0 10px rgba(34, 197, 94, 0.8);
         }
         .bg-pattern {
-            background-image: radial-gradient(#22c55e 0.5px, transparent 0.5px);
+            background-image: radial-gradient(var(--ben10-green) 0.5px, transparent 0.5px);
             background-size: 20px 20px;
             opacity: 0.1;
         }
@@ -31,36 +33,23 @@
             background-size: 400px 400px;
         }
         .scan-line {
-            width: 100%;
-            height: 2px;
+            width: 100%; height: 2px;
             background: rgba(34, 197, 94, 0.3);
-            position: absolute;
-            top: 0;
-            left: 0;
+            position: fixed; top: 0; left: 0;
             animation: scan 4s linear infinite;
-            z-index: 10;
-            pointer-events: none;
+            z-index: 100; pointer-events: none;
         }
-        @keyframes scan {
-            0% { top: 0; }
-            100% { top: 100%; }
-        }
-        .omnitrix-dial-glow {
-            box-shadow: 0 0 40px rgba(34, 197, 94, 0.4);
-        }
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
+        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+        .omnitrix-dial-glow { box-shadow: 0 0 40px rgba(34, 197, 94, 0.4); }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
-    <script type="importmap">
+<script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@^19.2.4",
-    "react-dom": "https://esm.sh/react-dom@^19.2.4/client",
     "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
     "react/": "https://esm.sh/react@^19.2.4/",
     "@google/genai": "https://esm.sh/@google/genai@^1.41.0"
@@ -68,390 +57,306 @@
 }
 </script>
 </head>
-<body>
-    <div id="root"></div>
+<body class="bg-circuits">
+    <!-- HUD Scan Line -->
+    <div class="scan-line"></div>
+    <div class="fixed inset-0 bg-pattern pointer-events-none"></div>
 
+    <!-- Transformation Overlay -->
+    <div id="trans-overlay" class="fixed inset-0 z-[200] bg-green-500 hidden items-center justify-center">
+        <h2 class="text-black font-orbitron font-black text-6xl md:text-9xl animate-ping uppercase italic">Transformando!</h2>
+    </div>
+
+    <!-- Member Area -->
+    <div id="member-area" class="fixed inset-0 z-[150] bg-black/95 backdrop-blur-3xl hidden flex-col items-center justify-center p-8 overflow-y-auto">
+        <button onclick="closeMemberArea()" class="absolute top-8 right-8 text-green-500 hover:text-white transition-all transform hover:rotate-90">
+            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <div class="max-w-4xl w-full flex flex-col items-center text-center">
+            <h2 class="text-4xl md:text-6xl font-orbitron font-black text-neon mb-12 uppercase italic animate-pulse">Bem-vindo, Recruta!</h2>
+            <div class="relative group mb-12">
+                <div class="absolute -inset-8 bg-green-500/20 blur-[60px] rounded-full opacity-70"></div>
+                <img src="https://static.wikia.nocookie.net/ben10/images/9/9c/Ben_10_-_Ben_Tennyson.png/revision/latest?cb=20250212113214&path-prefix=pt" alt="Ben Tennyson" class="relative w-full max-w-lg animate-float drop-shadow-[0_0_50px_rgba(34,197,94,0.4)]">
+            </div>
+            <p class="text-2xl text-gray-300 font-bold max-w-2xl leading-relaxed mb-8">"O Omnitrix não é um brinquedo, é uma responsabilidade. Agora o destino da galáxia também está em suas mãos."</p>
+            <button onclick="closeMemberArea()" class="bg-green-600 text-black font-black px-12 py-5 rounded-full font-orbitron text-xl hover:bg-green-500 transition-all shadow-[0_0_40px_rgba(34,197,94,0.5)] uppercase tracking-widest italic">VOLTAR À BASE</button>
+        </div>
+    </div>
+
+    <!-- Enrollment Modal -->
+    <div id="enroll-modal" class="fixed inset-0 z-[110] bg-black/95 backdrop-blur-xl hidden items-center justify-center p-6">
+        <div class="max-w-md w-full bg-neutral-900 border-4 border-green-500 p-10 rounded-[2.5rem] shadow-[0_0_100px_rgba(34,197,94,0.3)] relative">
+            <button onclick="closeModal()" class="absolute top-6 right-6 text-gray-500 hover:text-white"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            <h3 class="text-3xl font-orbitron font-black text-green-500 mb-6 uppercase italic tracking-tighter">RECRUTAMENTO ATIVO</h3>
+            <p class="text-gray-400 mb-8 font-medium">Sincronizando sequência genômica com a Base de Dados dos Encanadores...</p>
+            <div class="w-full bg-neutral-800 h-6 rounded-full overflow-hidden border-2 border-green-500/20 mb-8 shadow-inner">
+                <div id="progress-bar" class="h-full bg-green-500 w-0 transition-all duration-300 shadow-[0_0_15px_rgba(34,197,94,1)]"></div>
+            </div>
+            <div id="enroll-status" class="text-center font-orbitron text-xs animate-pulse tracking-widest font-black text-green-500/60 uppercase italic">ENVIANDO DADOS PARA O SETOR 2814...</div>
+            <div id="enroll-success" class="text-center hidden">
+                <p class="text-white font-black mb-8 text-xl font-orbitron italic">BEM-VINDO, RECRUTA!</p>
+                <button onclick="accessMembers()" class="w-full bg-green-600 text-black font-black py-4 rounded-2xl font-orbitron hover:bg-green-500 transition-all shadow-[0_0_30px_rgba(34,197,94,0.5)] uppercase tracking-widest italic animate-bounce">ACESSAR ÁREA DE MEMBROS</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-xl border-b-2 border-green-500/20 h-24 flex items-center">
+        <div class="max-w-7xl mx-auto px-8 w-full flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <img src="https://i.pinimg.com/736x/80/8d/f0/808df0e1d0d32768a4a5fdf6b5e8f5ec.jpg" alt="Logo" class="w-14 h-14 rounded-full border-4 border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.5)]">
+                <span class="font-orbitron font-black text-3xl tracking-tighter uppercase italic">O <span class="text-green-500">CURSO</span></span>
+            </div>
+            <div class="hidden md:flex gap-12 font-orbitron text-xs font-black tracking-[0.3em] uppercase text-gray-400 italic">
+                <a href="#inicio" class="hover:text-green-500 transition-colors">Início</a>
+                <a href="#curso" class="hover:text-green-500 transition-colors">Grade</a>
+                <a href="#depoimentos" class="hover:text-green-500 transition-colors">Relatórios</a>
+                <a href="#certificado" class="hover:text-green-500 transition-colors">Diploma</a>
+            </div>
+            <button onclick="startEnroll()" class="bg-green-600 hover:bg-green-500 text-black font-black px-8 py-3 rounded-full font-orbitron text-sm transition-all transform hover:scale-110 shadow-[0_0_25px_rgba(34,197,94,0.4)] uppercase italic">MATRICULE-SE</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="inicio" class="pt-48 pb-32 px-8">
+            <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
+                <div class="relative z-10 text-left">
+                    <span class="inline-block px-5 py-2 bg-green-500/10 border-2 border-green-500 text-green-500 rounded-full text-xs font-black font-orbitron mb-8 animate-pulse tracking-[0.2em] italic uppercase">SISTEMA OMNITRIX CALIBRADO</span>
+                    <h1 class="text-6xl md:text-8xl font-orbitron font-black mb-8 leading-none italic tracking-tighter uppercase">TORNE-SE UM <br><span class="text-neon">ENCANADOR</span></h1>
+                    <p class="text-2xl text-gray-300 mb-12 max-w-xl leading-relaxed font-semibold">Aprenda as artes marciais intergalácticas e o manejo técnico do dispositivo mais poderoso de Azmuth.</p>
+                    <button onclick="startEnroll()" class="px-10 py-5 bg-green-600 text-black font-black rounded-2xl font-orbitron text-lg hover:bg-green-500 transition-all shadow-[0_0_40px_rgba(34,197,94,0.5)] uppercase tracking-wider italic">RECRUTAR AGORA</button>
+                </div>
+                <div class="relative flex flex-col items-center">
+                    <div id="dial" class="w-72 h-72 md:w-96 md:h-96 rounded-full border-[12px] border-neutral-800 bg-neutral-900 relative shadow-[0_0_60px_rgba(0,0,0,1)] flex items-center justify-center cursor-pointer transition-transform duration-700 omnitrix-dial-glow" onclick="rotateDial()">
+                        <div class="absolute inset-0 bg-green-500/5 rounded-full"></div>
+                        <div class="w-36 h-36 md:w-48 md:h-48 bg-green-500 rounded-full flex items-center justify-center shadow-[0_0_80px_rgba(34,197,94,0.8)] z-10 border-8 border-black overflow-hidden">
+                            <img src="https://i.pinimg.com/736x/80/8d/f0/808df0e1d0d32768a4a5fdf6b5e8f5ec.jpg" class="w-full h-full object-cover">
+                        </div>
+                        <div class="absolute w-6 h-12 bg-green-600 rounded-lg shadow-[0_0_15px_rgba(34,197,94,1)] border-2 border-black" style="transform: rotate(0deg) translateY(-160px)"></div>
+                        <div class="absolute w-6 h-12 bg-green-600 rounded-lg shadow-[0_0_15px_rgba(34,197,94,1)] border-2 border-black" style="transform: rotate(90deg) translateY(-160px)"></div>
+                        <div class="absolute w-6 h-12 bg-green-600 rounded-lg shadow-[0_0_15px_rgba(34,197,94,1)] border-2 border-black" style="transform: rotate(180deg) translateY(-160px)"></div>
+                        <div class="absolute w-6 h-12 bg-green-600 rounded-lg shadow-[0_0_15px_rgba(34,197,94,1)] border-2 border-black" style="transform: rotate(270deg) translateY(-160px)"></div>
+                    </div>
+                    <button onclick="triggerTransform()" class="mt-12 px-12 py-4 bg-green-600 hover:bg-green-500 text-black font-black rounded-full transition-all hover:scale-110 shadow-[0_0_30px_rgba(34,197,94,0.6)] uppercase tracking-[0.2em] font-orbitron italic text-lg">É Hora do Herói!</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modules Section -->
+        <section id="curso" class="py-32 px-8 bg-black/40 border-y-2 border-green-500/10">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-5xl font-orbitron font-black mb-16 uppercase tracking-tighter italic text-center">Grade <span class="text-neon">Acadêmica</span></h2>
+                <div class="grid md:grid-cols-3 gap-8" id="modules-container">
+                    <!-- JS Injected Cards -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section id="depoimentos" class="py-32 px-8 relative bg-black/20">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-5xl font-orbitron font-black mb-24 uppercase tracking-tighter italic text-center">Relatórios de <span class="text-neon">Agentes</span></h2>
+                <div class="flex flex-col gap-24" id="testimonials-container">
+                    <!-- JS Injected Testimonials -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Certificate Section -->
+        <section id="certificado" class="py-32 px-8 bg-gradient-to-t from-green-900/30 to-transparent">
+            <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-20 items-center">
+                <div class="text-left">
+                    <h2 class="text-5xl font-orbitron font-black mb-8 uppercase tracking-tighter italic leading-tight">Mestre do <br><span class="text-neon">Omnitrix</span></h2>
+                    <p class="text-gray-300 text-xl mb-12 leading-relaxed font-medium italic">Certificação oficial válida em todos os quadrantes da Federação Galáctica. Assinatura molecular inclusiva.</p>
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-6 bg-black/60 p-6 rounded-2xl border-l-8 border-green-500 shadow-xl"><div class="text-green-500 text-3xl">✔</div><span class="font-black font-orbitron text-sm tracking-widest italic uppercase">Código de DNA Verificado</span></div>
+                        <div class="flex items-center gap-6 bg-black/60 p-6 rounded-2xl border-l-8 border-green-500 shadow-xl"><div class="text-green-500 text-3xl">✔</div><span class="font-black font-orbitron text-sm tracking-widest italic uppercase">Protocolo de Paz Ativo</span></div>
+                    </div>
+                </div>
+                <div class="relative group cursor-pointer" onclick="downloadCert()">
+                    <div class="absolute -inset-6 bg-green-500/30 blur-[60px] opacity-0 group-hover:opacity-100 transition duration-700"></div>
+                    <div class="relative bg-neutral-900 border-8 border-green-500/50 p-6 rounded-[2rem] shadow-2xl transform transition-transform group-hover:rotate-2 group-hover:scale-105">
+                        <img src="https://pt.quizur.com/_image?href=https%3A%2F%2Fdev-beta.quizur.com%2Fstorage%2Fv1%2Fobject%2Fpublic%2F%2Fimagens%2F%2F20146386%2F750a8375-7e7a-49a4-b92d-1829733bb9f7.png&w=600&h=600&f=webp" class="w-full rounded-xl">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
+                            <span class="text-green-500 font-orbitron font-black text-2xl uppercase italic drop-shadow-lg">BAIXAR ARQUIVO</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-20 px-8 border-t-2 border-green-500/10 bg-black/95">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
+            <div class="flex items-center gap-4">
+                <img src="https://i.pinimg.com/736x/80/8d/f0/808df0e1d0d32768a4a5fdf6b5e8f5ec.jpg" alt="Logo" class="w-12 h-12 rounded-full border-2 border-green-500 shadow-[0_0_15px_rgba(34,197,94,0.8)]">
+                <span class="font-orbitron font-black text-2xl tracking-tighter uppercase italic">O <span class="text-green-500">CURSO</span></span>
+            </div>
+            <p class="text-gray-500 text-sm font-bold tracking-widest uppercase italic">© 2024 Base do Setor 2814. Protocolos de Encanador Ativos.</p>
+        </div>
+    </footer>
+
+    <!-- Cartoon Network Logo - Bottom Right -->
+    <div class="fixed bottom-6 left-6 z-[60] group">
+        <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/20 shadow-2xl group-hover:shadow-[0_0_30px_rgba(34,197,94,0.6)] transition-all">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/Cartoon_Network_2010_logo.svg" alt="CN" class="w-16 md:w-24 h-auto">
+        </div>
+    </div>
+
+    <!-- Azmuth AI Chat -->
+    <div class="fixed bottom-6 right-6 w-80 md:w-96 z-[70]">
+        <div id="chat-box" class="hidden bg-neutral-900 border-2 border-green-500 rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(34,197,94,0.3)] flex flex-col h-[450px]">
+            <div class="bg-green-600 p-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <img src="https://picsum.photos/seed/azmuth/50/50" class="w-8 h-8 rounded-full border border-black">
+                    <span class="text-black font-bold font-orbitron uppercase italic text-sm">Azmuth (IA)</span>
+                </div>
+                <button onclick="toggleChat()" class="text-black font-black">X</button>
+            </div>
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-black/40 scrollbar-hide">
+                <div class="flex justify-start"><div class="bg-green-900/40 text-green-100 p-3 rounded-lg text-sm border-r-4 border-green-600 italic">"Hmph. Mais um recruta curioso. O que você quer saber sobre minha obra-prima?"</div></div>
+            </div>
+            <div class="p-3 border-t border-neutral-800 flex gap-2">
+                <input id="chat-input" type="text" placeholder="Fale com o Primeiro Pensador..." class="flex-1 bg-neutral-800 text-white text-sm p-2 rounded-lg outline-none border border-transparent focus:border-green-500">
+                <button onclick="sendMessage()" class="bg-green-600 p-2 rounded-lg hover:bg-green-500"><svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg></button>
+            </div>
+        </div>
+        <button id="chat-toggle" onclick="toggleChat()" class="float-right w-16 h-16 bg-green-600 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.6)] border-4 border-black group">
+            <img src="https://picsum.photos/seed/azmuth/50/50" class="w-12 h-12 rounded-full group-hover:scale-110 transition-transform">
+        </button>
+    </div>
+
+    <!-- Scripts -->
     <script type="module">
-        import React, { useState, useEffect, useRef } from 'react';
-        import ReactDOM from 'react-dom';
+        import { GoogleGenAI } from "@google/genai";
 
-        // --- Constants & Data ---
-        const LOGO_URL = "https://i.pinimg.com/736x/80/8d/f0/808df0e1d0d32768a4a5fdf6b5e8f5ec.jpg";
-        const CERTIFICATE_URL = "https://pt.quizur.com/_image?href=https%3A%2F%2Fdev-beta.quizur.com%2Fstorage%2Fv1%2Fobject%2Fpublic%2F%2Fimagens%2F%2F20146386%2F750a8375-7e7a-49a4-b92d-1829733bb9f7.png&w=600&h=600&f=webp";
-        const CN_LOGO = "https://upload.wikimedia.org/wikipedia/commons/8/80/Cartoon_Network_2010_logo.svg";
-        const BEN_TENNYSON_IMG = "https://static.wikia.nocookie.net/ben10/images/9/9c/Ben_10_-_Ben_Tennyson.png/revision/latest?cb=20250212113214&path-prefix=pt";
-
+        // Constants
         const MODULES = [
-            {
-                id: 1,
-                title: "Encanador Iniciante",
-                description: "O ponto de partida para todo recruta. Entenda as leis intergalácticas e a interface básica do usuário.",
-                topics: ["História dos Encanadores", "Juramento do Recruta", "Sincronização de DNA Básica"]
-            },
-            {
-                id: 2,
-                title: "Supremo",
-                description: "Evolua seu DNA. Domine a função de evolução e aprenda táticas de combate avançadas contra vilões de nível galáctico.",
-                topics: ["Função de Evolução (Supremos)", "Mecânicas de Combate Tático", "Gestão de Energia e Recarga"]
-            },
-            {
-                id: 3,
-                title: "Definitivo",
-                description: "O ápice do domínio tecnológico. Desbloqueie o Controle Mestre e a diplomacia de nível realidade.",
-                topics: ["Controle Mestre (Master Control)", "Protocolos de Auto-Destruição", "Estabilidade de Realidade (Alien X)"]
-            }
+            { id: 1, title: "Encanador Iniciante", desc: "História, Juramento e Sincronização básica.", topics: ["História", "Interface do Usuário", "Juramento"] },
+            { id: 2, title: "Supremo", desc: "Função de evolução e táticas de combate galáctico.", topics: ["Evolução de DNA", "Combate Tático", "Gestão de Carga"] },
+            { id: 3, title: "Definitivo", desc: "Controle Mestre e diplomacia de nível realidade.", topics: ["Master Control", "Auto-Destruição", "Estabilidade Galáctica"] }
         ];
 
         const TESTIMONIALS = [
-            {
-                id: 1,
-                name: "Ricardo Oliveira",
-                text: "O curso é simplesmente fantástico. O conteúdo sobre calibração do Omnitrix é muito superior a tudo que já vi na rede dos Encanadores.",
-                image: "https://pbs.twimg.com/media/EA-VOc1XUAA9EbP?format=jpg&name=medium"
-            },
-            {
-                id: 2,
-                name: "Ana Luíza Santos",
-                text: "Excelente didática! Eu tinha muita dificuldade com as transformações tecnológicas, mas o módulo Supremo explicou tudo perfeitamente.",
-                image: "https://pt.quizur.com/_image?href=https%3A%2F%2Fdev-beta.quizur.com%2Fstorage%2Fv1%2Fobject%2Fpublic%2F%2Fimagens%2F%2F20972455%2Fff18dec9-fcce-4766-be62-88f4effd3792.png&w=600&h=600&f=webp"
-            }
+            { id: 1, name: "Ricardo Oliveira", text: "O conteúdo sobre calibração é superior a tudo na rede.", img: "https://pbs.twimg.com/media/EA-VOc1XUAA9EbP?format=jpg&name=medium" },
+            { id: 2, name: "Ana Luíza Santos", text: "Excelente didática para as transformações!", img: "https://pt.quizur.com/_image?href=https%3A%2F%2Fdev-beta.quizur.com%2Fstorage%2Fv1%2Fobject%2Fpublic%2F%2Fimagens%2F%2F20972455%2Fff18dec9-fcce-4766-be62-88f4effd3792.png&w=600&h=600&f=webp" }
         ];
 
-        // --- Sub-Components ---
-        const CourseCard = ({ module, onAccess }) => (
-            <div className="bg-neutral-900/50 border border-green-500/30 p-8 rounded-2xl hover:border-green-400 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all group backdrop-blur-sm">
-                <div className="flex items-center gap-4 mb-6">
-                    <div className="w-14 h-14 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500 font-bold text-2xl font-orbitron border border-green-500/20">
-                        {module.id}
-                    </div>
-                    <h3 className="text-2xl font-black font-orbitron group-hover:text-neon transition-colors uppercase italic tracking-tighter text-left">
-                        {module.title}
-                    </h3>
-                </div>
-                <p className="text-gray-400 mb-8 leading-relaxed font-medium text-left">
-                    {module.description}
-                </p>
-                <ul className="space-y-4 mb-8">
-                    {module.topics.map((topic, index) => (
-                        <li key={index} className="flex items-center gap-3 text-sm text-gray-300 font-semibold text-left">
-                            <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,1)]"></span>
-                            {topic}
-                        </li>
-                    ))}
-                </ul>
-                <button 
-                    onClick={onAccess}
-                    className="w-full py-3 bg-transparent border-2 border-green-600 text-green-500 hover:bg-green-600 hover:text-black font-black rounded-xl transition-all text-sm uppercase tracking-widest font-orbitron italic"
-                >
-                    Acessar Módulo
-                </button>
-            </div>
-        );
-
-        const OmnitrixDial = ({ onTransform }) => {
-            const [rotation, setRotation] = useState(0);
-            return (
-                <div className="relative flex flex-col items-center justify-center">
-                    <div 
-                        className="w-72 h-72 md:w-96 md:h-96 rounded-full border-[12px] border-neutral-800 bg-neutral-900 relative shadow-[0_0_60px_rgba(0,0,0,1)] flex items-center justify-center transition-transform duration-700 cursor-pointer group omnitrix-dial-glow"
-                        onClick={() => setRotation(prev => prev + 45)}
-                        style={{ transform: `rotate(${rotation}deg)` }}
-                    >
-                        <div className="absolute inset-0 bg-[url('https://www.transparentpng.com/download/omnitrix/omnitrix-hd-images-2.png')] bg-cover opacity-10"></div>
-                        <div className="w-36 h-36 md:w-48 md:h-48 bg-green-500 rounded-full flex items-center justify-center shadow-[0_0_80px_rgba(34,197,94,0.8)] relative z-10 border-8 border-black overflow-hidden group-hover:scale-105 transition-transform">
-                            <img src={LOGO_URL} alt="Omnitrix Core" className="w-full h-full object-cover" />
-                        </div>
-                        {[...Array(4)].map((_, i) => (
-                            <div 
-                                key={i}
-                                className="absolute w-6 h-12 bg-green-600 rounded-lg shadow-[0_0_15px_rgba(34,197,94,1)] border-2 border-black"
-                                style={{ transform: `rotate(${i * 90}deg) translateY(-160px)` }}
-                            ></div>
-                        ))}
-                    </div>
-                    <button 
-                        onClick={onTransform}
-                        className="mt-12 px-12 py-4 bg-green-600 hover:bg-green-500 text-black font-black rounded-full transition-all hover:scale-110 active:scale-90 shadow-[0_0_30px_rgba(34,197,94,0.6)] uppercase tracking-[0.2em] font-orbitron italic text-lg"
-                    >
-                        É Hora do Herói!
-                    </button>
-                </div>
-            );
+        // Global State & UI Functions
+        window.rotation = 0;
+        window.rotateDial = () => {
+            window.rotation += 45;
+            document.getElementById('dial').style.transform = `rotate(${window.rotation}deg)`;
         };
 
-        // --- Main App Component ---
-        const App = () => {
-            const [isTransforming, setIsTransforming] = useState(false);
-            const [showEnrollModal, setShowEnrollModal] = useState(false);
-            const [enrollProgress, setEnrollProgress] = useState(0);
-            const [showBenArea, setShowBenArea] = useState(false);
-
-            const handleEnroll = () => {
-                setShowEnrollModal(true);
-                setEnrollProgress(0);
-                const interval = setInterval(() => {
-                    setEnrollProgress(prev => {
-                        if (prev >= 100) {
-                            clearInterval(interval);
-                            return 100;
-                        }
-                        return prev + 2;
-                    });
-                }, 40);
-            };
-
-            const handleAccessMembers = () => {
-                setShowEnrollModal(false);
-                setShowBenArea(true);
-            };
-
-            const handleTransformation = () => {
-                setIsTransforming(true);
-                setTimeout(() => setIsTransforming(false), 2000);
-            };
-
-            const handleDownload = () => {
-                alert('Iniciando transferência segura de dados do certificado...');
-            };
-
-            return (
-                <div className={`min-h-screen selection:bg-green-500 selection:text-black bg-circuits transition-colors duration-500 ${isTransforming ? 'bg-green-500/40' : ''}`}>
-                    
-                    {/* Cartoon Network Logo */}
-                    <div className="fixed bottom-6 right-6 z-[60] group">
-                        <div className="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/20 shadow-2xl group-hover:shadow-[0_0_30px_rgba(34,197,94,0.6)] transition-all duration-500">
-                            <img src={CN_LOGO} alt="Cartoon Network" className="w-16 md:w-24 h-auto" />
-                        </div>
-                    </div>
-
-                    {/* Member Area Overlay (Ben Tennyson Image) */}
-                    {showBenArea && (
-                        <div className="fixed inset-0 z-[150] flex flex-col items-center justify-center p-8 bg-black/95 backdrop-blur-3xl overflow-y-auto">
-                            <button 
-                                onClick={() => setShowBenArea(false)} 
-                                className="absolute top-8 right-8 text-green-500 hover:text-white transition-all transform hover:rotate-90"
-                            >
-                                <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                            </button>
-                            
-                            <div className="max-w-4xl w-full flex flex-col items-center text-center">
-                                <h2 className="text-4xl md:text-6xl font-orbitron font-black text-neon mb-12 uppercase italic animate-pulse">
-                                    Bem-vindo à Área de Membros, Recruta!
-                                </h2>
-                                
-                                <div className="relative group mb-12">
-                                    <div className="absolute -inset-8 bg-green-500/20 blur-[60px] rounded-full opacity-70 group-hover:opacity-100 transition-opacity"></div>
-                                    <img 
-                                        src={BEN_TENNYSON_IMG} 
-                                        alt="Ben Tennyson" 
-                                        className="relative w-full max-w-lg animate-float drop-shadow-[0_0_50px_rgba(34,197,94,0.4)]"
-                                    />
-                                </div>
-
-                                <p className="text-2xl text-gray-300 font-bold max-w-2xl leading-relaxed mb-8">
-                                    "O Omnitrix não é um brinquedo, é uma responsabilidade. Agora que você faz parte da Academia, o destino da galáxia também está em suas mãos."
-                                </p>
-
-                                <button 
-                                    onClick={() => setShowBenArea(false)}
-                                    className="bg-green-600 text-black font-black px-12 py-5 rounded-full font-orbitron text-xl hover:bg-green-500 transition-all shadow-[0_0_40px_rgba(34,197,94,0.5)] uppercase tracking-widest italic"
-                                >
-                                    VOLTAR À BASE
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Transformation Overlay */}
-                    {isTransforming && (
-                        <div className="fixed inset-0 z-[100] bg-green-500 flex items-center justify-center">
-                            <h2 className="text-black font-orbitron font-black text-6xl md:text-9xl animate-ping uppercase italic tracking-tighter">TRANSFORMANDO!</h2>
-                        </div>
-                    )}
-
-                    {/* Enrollment Modal */}
-                    {showEnrollModal && (
-                        <div className="fixed inset-0 z-[110] flex items-center justify-center p-6 bg-black/95 backdrop-blur-xl">
-                            <div className="max-w-md w-full bg-neutral-900 border-4 border-green-500 p-10 rounded-[2.5rem] shadow-[0_0_100px_rgba(34,197,94,0.3)] relative">
-                                <button onClick={() => setShowEnrollModal(false)} className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors">
-                                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                </button>
-                                <h3 className="text-3xl font-orbitron font-black text-green-500 mb-6 uppercase italic tracking-tighter">RECRUTAMENTO ATIVO</h3>
-                                <p className="text-gray-400 mb-8 font-medium">Sincronizando sequência genômica com a Base de Dados dos Encanadores...</p>
-                                <div className="w-full bg-neutral-800 h-6 rounded-full overflow-hidden border-2 border-green-500/20 mb-8 shadow-inner">
-                                    <div className="h-full bg-green-500 transition-all duration-300 shadow-[0_0_15px_rgba(34,197,94,1)]" style={{ width: `${enrollProgress}%` }}></div>
-                                </div>
-                                {enrollProgress < 100 ? (
-                                    <p className="text-center font-orbitron text-xs animate-pulse tracking-widest font-black text-green-500/60 uppercase italic">ENVIANDO DADOS PARA O SETOR 2814...</p>
-                                ) : (
-                                    <div className="text-center">
-                                        <p className="text-white font-black mb-8 text-xl font-orbitron italic">BEM-VINDO, RECRUTA!</p>
-                                        <button 
-                                            onClick={handleAccessMembers}
-                                            className="w-full bg-green-600 text-black font-black py-4 rounded-2xl font-orbitron hover:bg-green-500 transition-all shadow-[0_0_30px_rgba(34,197,94,0.5)] uppercase tracking-widest italic animate-bounce"
-                                        >
-                                            ACESSAR ÁREA DE MEMBROS
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
-                    <div className="fixed inset-0 pointer-events-none">
-                        <div className="bg-pattern absolute inset-0 opacity-20"></div>
-                        <div className="scan-line"></div>
-                    </div>
-
-                    {/* Navigation */}
-                    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-xl border-b-2 border-green-500/20">
-                        <div className="max-w-7xl mx-auto px-8 h-24 flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <div className="w-14 h-14 rounded-full overflow-hidden border-4 border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.5)]">
-                                    <img src={LOGO_URL} alt="Logo" className="w-full h-full object-cover" />
-                                </div>
-                                <span className="font-orbitron font-black text-3xl tracking-tighter uppercase italic">
-                                    O <span className="text-green-500">CURSO</span>
-                                </span>
-                            </div>
-                            <div className="hidden md:flex gap-12 font-orbitron text-xs font-black tracking-[0.3em] uppercase text-gray-400 italic">
-                                <a href="#inicio" className="hover:text-green-500 transition-colors">Início</a>
-                                <a href="#curso" className="hover:text-green-500 transition-colors">Grade</a>
-                                <a href="#depoimentos" className="hover:text-green-500 transition-colors">Relatórios</a>
-                                <a href="#certificado" className="hover:text-green-500 transition-colors">Diplomacia</a>
-                            </div>
-                            <button 
-                                onClick={handleEnroll}
-                                className="bg-green-600 hover:bg-green-500 text-black font-black px-8 py-3 rounded-full font-orbitron text-sm transition-all transform hover:scale-110 shadow-[0_0_25px_rgba(34,197,94,0.4)] uppercase italic tracking-wider"
-                            >
-                                MATRICULE-SE
-                            </button>
-                        </div>
-                    </nav>
-
-                    {/* Hero Section */}
-                    <section id="inicio" className="pt-48 pb-32 px-8 overflow-hidden relative">
-                        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
-                            <div className="relative z-10">
-                                <span className="inline-block px-5 py-2 bg-green-500/10 border-2 border-green-500 text-green-500 rounded-full text-xs font-black font-orbitron mb-8 animate-pulse tracking-[0.2em] italic uppercase">
-                                    SISTEMA OMNITRIX CALIBRADO
-                                </span>
-                                <h1 className="text-6xl md:text-8xl font-orbitron font-black mb-8 leading-none italic tracking-tighter uppercase">
-                                    TORNE-SE UM <br />
-                                    <span className="text-neon">ENCANADOR</span>
-                                </h1>
-                                <p className="text-2xl text-gray-300 mb-12 max-w-xl leading-relaxed font-semibold">
-                                    Aprenda as artes marciais intergalácticas e o manejo técnico do dispositivo mais poderoso de Azmuth.
-                                </p>
-                                <div className="flex flex-wrap gap-6">
-                                    <button 
-                                        onClick={handleEnroll}
-                                        className="px-10 py-5 bg-green-600 text-black font-black rounded-2xl font-orbitron text-lg hover:bg-green-500 transition-all shadow-[0_0_40px_rgba(34,197,94,0.5)] uppercase tracking-wider italic"
-                                    >
-                                        RECRUTAR AGORA
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="relative flex justify-center">
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-green-500/10 blur-[120px] rounded-full"></div>
-                                <OmnitrixDial onTransform={handleTransformation} />
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* Modules Section */}
-                    <section id="curso" className="py-32 px-8 bg-black/40 border-y-2 border-green-500/10">
-                        <div className="max-w-7xl mx-auto">
-                            <div className="text-center mb-24">
-                                <h2 className="text-5xl font-orbitron font-black mb-6 uppercase tracking-tighter italic text-center">Grade <span className="text-neon">Acadêmica</span></h2>
-                                <div className="w-40 h-1.5 bg-green-500 mx-auto rounded-full shadow-[0_0_20px_rgba(34,197,94,1)]"></div>
-                            </div>
-                            <div className="grid md:grid-cols-3 gap-8">
-                                {MODULES.map((mod) => (
-                                    <CourseCard key={mod.id} module={mod} onAccess={handleEnroll} />
-                                ))}
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* Testimonials */}
-                    <section id="depoimentos" className="py-32 px-8 relative bg-black/20">
-                        <div className="max-w-7xl mx-auto">
-                            <div className="text-center mb-24">
-                                <h2 className="text-5xl font-orbitron font-black mb-6 uppercase tracking-tighter italic text-center">Relatórios de <span className="text-neon">Agentes</span></h2>
-                                <p className="text-gray-400 text-xl font-bold italic text-center">Depoimentos verificados no Banco de Dados Galáctico.</p>
-                            </div>
-                            <div className="flex flex-col gap-24 text-center">
-                                {TESTIMONIALS.map((t) => (
-                                    <div key={t.id} className="group relative max-w-4xl mx-auto w-full">
-                                        <div className="relative bg-neutral-900/80 border-2 border-green-500/20 p-10 md:p-16 rounded-[3rem] transition-all flex flex-col items-center shadow-3xl backdrop-blur-xl group-hover:border-green-500/50">
-                                            <div className="w-full h-80 mb-12 rounded-3xl overflow-hidden border-4 border-green-500/20 shadow-2xl">
-                                                <img src={t.image} alt={t.name} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-[3s]" />
-                                            </div>
-                                            <div className="text-center">
-                                                <h4 className="font-orbitron font-black text-3xl text-green-500 uppercase italic tracking-widest mb-6">{t.name}</h4>
-                                                <p className="text-2xl text-gray-300 italic leading-relaxed font-semibold max-w-2xl mx-auto">"{t.text}"</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* Certificate */}
-                    <section id="certificado" className="py-32 px-8 bg-gradient-to-t from-green-900/30 to-transparent">
-                        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-20 items-center">
-                            <div className="text-left">
-                                <h2 className="text-5xl font-orbitron font-black mb-8 uppercase tracking-tighter italic leading-tight text-left">Mestre do <br /><span className="text-neon">Omnitrix</span></h2>
-                                <p className="text-gray-300 text-xl mb-12 leading-relaxed font-medium italic text-left">
-                                    Certificação oficial válida em todos os quadrantes da Federação Galáctica. Assinatura molecular inclusiva.
-                                </p>
-                                <div className="space-y-6">
-                                    {["CÓDIGO DE DNA VERIFICADO", "PROTOCOLO DE PAZ ATIVO"].map((item, idx) => (
-                                        <div key={idx} className="flex items-center gap-6 bg-black/60 p-6 rounded-2xl border-l-8 border-green-500 backdrop-blur-sm shadow-xl">
-                                            <div className="text-green-500 text-3xl">✔</div>
-                                            <span className="font-black font-orbitron text-sm tracking-widest italic">{item}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="relative group cursor-pointer" onClick={handleDownload}>
-                                <div className="absolute -inset-6 bg-green-500/30 blur-[60px] opacity-0 group-hover:opacity-100 transition duration-700"></div>
-                                <div className="relative bg-neutral-900 border-8 border-green-500/50 p-6 rounded-[2rem] shadow-2xl transform transition-transform group-hover:rotate-2 group-hover:scale-105">
-                                    <img src={CERTIFICATE_URL} alt="Certificado" className="w-full rounded-xl" />
-                                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
-                                        <span className="text-green-500 font-orbitron font-black text-2xl uppercase italic shadow-black drop-shadow-lg">BAIXAR ARQUIVO</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* Footer */}
-                    <footer className="py-20 px-8 border-t-2 border-green-500/10 bg-black/95">
-                        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-green-500 shadow-[0_0_15px_rgba(34,197,94,0.8)]">
-                                    <img src={LOGO_URL} alt="Logo" className="w-full h-full object-cover" />
-                                </div>
-                                <span className="font-orbitron font-black text-2xl tracking-tighter uppercase italic">O <span className="text-green-500">CURSO</span></span>
-                            </div>
-                            <p className="text-gray-500 text-sm font-bold tracking-widest uppercase italic">© 2024 Base do Setor 2814. Protocolos de Encanador Ativos.</p>
-                            <div className="flex gap-8 font-orbitron text-xs font-black tracking-widest uppercase text-gray-500 italic">
-                                <a href="#" className="hover:text-green-500 transition-colors">Instagram</a>
-                                <a href="#" className="hover:text-green-500 transition-colors">Galactic-Net</a>
-                            </div>
-                        </div>
-                    </footer>
-                </div>
-            );
+        window.triggerTransform = () => {
+            const overlay = document.getElementById('trans-overlay');
+            overlay.style.display = 'flex';
+            setTimeout(() => overlay.style.display = 'none', 2000);
         };
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        window.startEnroll = () => {
+            document.getElementById('enroll-modal').style.display = 'flex';
+            const bar = document.getElementById('progress-bar');
+            const status = document.getElementById('enroll-status');
+            const success = document.getElementById('enroll-success');
+            let progress = 0;
+            bar.style.width = '0%';
+            status.classList.remove('hidden');
+            success.classList.add('hidden');
+
+            const interval = setInterval(() => {
+                progress += 2;
+                bar.style.width = `${progress}%`;
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    status.classList.add('hidden');
+                    success.classList.remove('hidden');
+                }
+            }, 40);
+        };
+
+        window.closeModal = () => document.getElementById('enroll-modal').style.display = 'none';
+        window.accessMembers = () => {
+            closeModal();
+            document.getElementById('member-area').style.display = 'flex';
+        };
+        window.closeMemberArea = () => document.getElementById('member-area').style.display = 'none';
+        window.downloadCert = () => alert('Sincronizando código de barras galáctico... Download iniciado!');
+
+        window.toggleChat = () => {
+            const box = document.getElementById('chat-box');
+            const toggle = document.getElementById('chat-toggle');
+            box.classList.toggle('hidden');
+            toggle.classList.toggle('hidden');
+        };
+
+        // Populate Content
+        const modulesCont = document.getElementById('modules-container');
+        MODULES.forEach(m => {
+            modulesCont.innerHTML += `
+                <div class="bg-neutral-900/50 border border-green-500/30 p-8 rounded-2xl hover:border-green-400 transition-all group backdrop-blur-sm text-left">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-14 h-14 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500 font-bold text-2xl font-orbitron border border-green-500/20">${m.id}</div>
+                        <h3 class="text-2xl font-black font-orbitron group-hover:text-neon uppercase italic tracking-tighter">${m.title}</h3>
+                    </div>
+                    <p class="text-gray-400 mb-8 font-medium">${m.desc}</p>
+                    <ul class="space-y-4 mb-8">
+                        ${m.topics.map(t => `<li class="flex items-center gap-3 text-sm text-gray-300 font-semibold"><span class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,1)]"></span>${t}</li>`).join('')}
+                    </ul>
+                    <button onclick="startEnroll()" class="w-full py-3 bg-transparent border-2 border-green-600 text-green-500 hover:bg-green-600 hover:text-black font-black rounded-xl transition-all font-orbitron italic uppercase text-xs tracking-widest">Acessar Módulo</button>
+                </div>
+            `;
+        });
+
+        const testCont = document.getElementById('testimonials-container');
+        TESTIMONIALS.forEach(t => {
+            testCont.innerHTML += `
+                <div class="bg-neutral-900/80 border-2 border-green-500/20 p-10 md:p-16 rounded-[3rem] transition-all flex flex-col items-center shadow-3xl backdrop-blur-xl hover:border-green-500/50">
+                    <div class="w-full h-80 mb-12 rounded-3xl overflow-hidden border-4 border-green-500/20 shadow-2xl">
+                        <img src="${t.img}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="text-center">
+                        <h4 class="font-orbitron font-black text-3xl text-green-500 uppercase italic mb-6">${t.name}</h4>
+                        <p class="text-2xl text-gray-300 italic font-semibold max-w-2xl">"${t.text}"</p>
+                    </div>
+                </div>
+            `;
+        });
+
+        // Azmuth Chat Logic
+        const API_KEY = ""; // Injected automatically from process.env.API_KEY
+        window.sendMessage = async () => {
+            const input = document.getElementById('chat-input');
+            const messages = document.getElementById('chat-messages');
+            const text = input.value.trim();
+            if (!text) return;
+
+            input.value = '';
+            messages.innerHTML += `<div class="flex justify-end"><div class="bg-neutral-800 text-white p-3 rounded-lg text-sm border-l-4 border-green-500">${text}</div></div>`;
+            messages.scrollTop = messages.scrollHeight;
+
+            try {
+                const ai = new GoogleGenAI({ apiKey: API_KEY });
+                const response = await ai.models.generateContent({
+                    model: 'gemini-3-flash-preview',
+                    contents: text,
+                    config: {
+                        systemInstruction: "Você é Azmuth, o criador do Omnitrix. Você é brilhante, impaciente mas ensina recrutas Encanadores. Responda em português, use termos do universo Ben 10 e seja um pouco arrogante porém útil.",
+                    }
+                });
+                const reply = response.text;
+                messages.innerHTML += `<div class="flex justify-start"><div class="bg-green-900/40 text-green-100 p-3 rounded-lg text-sm border-r-4 border-green-600 italic">"${reply}"</div></div>`;
+                messages.scrollTop = messages.scrollHeight;
+            } catch (err) {
+                messages.innerHTML += `<div class="flex justify-start text-red-500 text-xs italic">A conexão galáctica falhou. Tente novamente.</div>`;
+            }
+        };
+
+        document.getElementById('chat-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
     </script>
 </body>
 </html>
