@@ -17,6 +17,7 @@
             color: #ffffff;
             font-family: 'Rajdhani', sans-serif;
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
         .text-neon {
@@ -45,6 +46,11 @@
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Mobile fixes */
+        @media (max-width: 640px) {
+            .hero-title { font-size: 2.5rem; line-height: 1.1; }
+        }
     </style>
 <script type="importmap">
 {
@@ -65,66 +71,68 @@
 
     <!-- Transformation Overlay -->
     <div id="trans-overlay" class="fixed inset-0 z-[200] bg-green-500 hidden items-center justify-center">
-        <h2 class="text-black font-orbitron font-black text-6xl md:text-9xl animate-ping uppercase italic">Transformando!</h2>
+        <h2 class="text-black font-orbitron font-black text-4xl sm:text-6xl md:text-9xl animate-ping uppercase italic text-center px-4">Transformando!</h2>
     </div>
 
     <!-- Member Area -->
-    <div id="member-area" class="fixed inset-0 z-[150] bg-black/95 backdrop-blur-3xl hidden flex-col items-center justify-center p-8 overflow-y-auto">
-        <button onclick="closeMemberArea()" class="absolute top-8 right-8 text-green-500 hover:text-white transition-all transform hover:rotate-90">
-            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+    <div id="member-area" class="fixed inset-0 z-[150] bg-black/95 backdrop-blur-3xl hidden flex-col items-center justify-start p-4 sm:p-8 overflow-y-auto">
+        <button onclick="closeMemberArea()" class="absolute top-4 right-4 sm:top-8 sm:right-8 text-green-500 hover:text-white transition-all transform hover:rotate-90 z-10">
+            <svg class="w-10 h-10 sm:w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
-        <div class="max-w-4xl w-full flex flex-col items-center text-center">
-            <h2 class="text-4xl md:text-6xl font-orbitron font-black text-neon mb-12 uppercase italic animate-pulse">Bem-vindo, Recruta!</h2>
-            <div class="relative group mb-12">
-                <div class="absolute -inset-8 bg-green-500/20 blur-[60px] rounded-full opacity-70"></div>
-                <img src="https://static.wikia.nocookie.net/ben10/images/9/9c/Ben_10_-_Ben_Tennyson.png/revision/latest?cb=20250212113214&path-prefix=pt" alt="Ben Tennyson" class="relative w-full max-w-lg animate-float drop-shadow-[0_0_50px_rgba(34,197,94,0.4)]">
+        <div class="max-w-4xl w-full flex flex-col items-center text-center py-12 sm:py-20">
+            <h2 class="text-3xl sm:text-4xl md:text-6xl font-orbitron font-black text-neon mb-8 sm:mb-12 uppercase italic animate-pulse">Bem-vindo, Recruta!</h2>
+            <div class="relative group mb-8 sm:mb-12 px-4">
+                <div class="absolute -inset-4 sm:-inset-8 bg-green-500/20 blur-[40px] sm:blur-[60px] rounded-full opacity-70"></div>
+                <img src="https://static.wikia.nocookie.net/ben10/images/9/9c/Ben_10_-_Ben_Tennyson.png/revision/latest?cb=20250212113214&path-prefix=pt" alt="Ben Tennyson" class="relative w-full max-w-xs sm:max-w-lg animate-float drop-shadow-[0_0_50px_rgba(34,197,94,0.4)]">
             </div>
-            <p class="text-2xl text-gray-300 font-bold max-w-2xl leading-relaxed mb-8">"O Omnitrix não é um brinquedo, é uma responsabilidade. Agora o destino da galáxia também está em suas mãos."</p>
-            <button onclick="closeMemberArea()" class="bg-green-600 text-black font-black px-12 py-5 rounded-full font-orbitron text-xl hover:bg-green-500 transition-all shadow-[0_0_40px_rgba(34,197,94,0.5)] uppercase tracking-widest italic">VOLTAR À BASE</button>
+            <p class="text-lg sm:text-2xl text-gray-300 font-bold max-w-2xl leading-relaxed mb-8 px-4">"O Omnitrix não é um brinquedo, é uma responsabilidade. Agora o destino da galáxia também está em suas mãos."</p>
+            <button onclick="closeMemberArea()" class="bg-green-600 text-black font-black px-8 py-4 sm:px-12 sm:py-5 rounded-full font-orbitron text-lg sm:text-xl hover:bg-green-500 transition-all shadow-[0_0_40px_rgba(34,197,94,0.5)] uppercase tracking-widest italic">VOLTAR À BASE</button>
         </div>
     </div>
 
     <!-- Enrollment Modal -->
-    <div id="enroll-modal" class="fixed inset-0 z-[110] bg-black/95 backdrop-blur-xl hidden items-center justify-center p-6">
-        <div class="max-w-md w-full bg-neutral-900 border-4 border-green-500 p-10 rounded-[2.5rem] shadow-[0_0_100px_rgba(34,197,94,0.3)] relative">
-            <button onclick="closeModal()" class="absolute top-6 right-6 text-gray-500 hover:text-white"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
-            <h3 class="text-3xl font-orbitron font-black text-green-500 mb-6 uppercase italic tracking-tighter">RECRUTAMENTO ATIVO</h3>
-            <p class="text-gray-400 mb-8 font-medium">Sincronizando sequência genômica com a Base de Dados dos Encanadores...</p>
-            <div class="w-full bg-neutral-800 h-6 rounded-full overflow-hidden border-2 border-green-500/20 mb-8 shadow-inner">
+    <div id="enroll-modal" class="fixed inset-0 z-[110] bg-black/95 backdrop-blur-xl hidden items-center justify-center p-4">
+        <div class="max-w-md w-full bg-neutral-900 border-4 border-green-500 p-6 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] shadow-[0_0_100px_rgba(34,197,94,0.3)] relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white"><svg class="w-6 h-6 sm:w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            <h3 class="text-xl sm:text-3xl font-orbitron font-black text-green-500 mb-4 sm:mb-6 uppercase italic tracking-tighter">RECRUTAMENTO ATIVO</h3>
+            <p class="text-gray-400 mb-6 sm:mb-8 font-medium text-sm sm:text-base">Sincronizando sequência genômica com a Base de Dados dos Encanadores...</p>
+            <div class="w-full bg-neutral-800 h-4 sm:h-6 rounded-full overflow-hidden border-2 border-green-500/20 mb-6 sm:mb-8 shadow-inner">
                 <div id="progress-bar" class="h-full bg-green-500 w-0 transition-all duration-300 shadow-[0_0_15px_rgba(34,197,94,1)]"></div>
             </div>
-            <div id="enroll-status" class="text-center font-orbitron text-xs animate-pulse tracking-widest font-black text-green-500/60 uppercase italic">ENVIANDO DADOS PARA O SETOR 2814...</div>
+            <div id="enroll-status" class="text-center font-orbitron text-[10px] sm:text-xs animate-pulse tracking-widest font-black text-green-500/60 uppercase italic">ENVIANDO DADOS PARA O SETOR 2814...</div>
             <div id="enroll-success" class="text-center hidden">
-                <p class="text-white font-black mb-8 text-xl font-orbitron italic">BEM-VINDO, RECRUTA!</p>
-                <button onclick="accessMembers()" class="w-full bg-green-600 text-black font-black py-4 rounded-2xl font-orbitron hover:bg-green-500 transition-all shadow-[0_0_30px_rgba(34,197,94,0.5)] uppercase tracking-widest italic animate-bounce">ACESSAR ÁREA DE MEMBROS</button>
+                <p class="text-white font-black mb-6 sm:mb-8 text-lg sm:text-xl font-orbitron italic">BEM-VINDO, RECRUTA!</p>
+                <button onclick="accessMembers()" class="w-full bg-green-600 text-black font-black py-4 rounded-xl sm:rounded-2xl font-orbitron hover:bg-green-500 transition-all shadow-[0_0_30px_rgba(34,197,94,0.5)] uppercase tracking-widest italic animate-bounce">ACESSAR ÁREA DE MEMBROS</button>
             </div>
         </div>
     </div>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-xl border-b-2 border-green-500/20 h-24 flex items-center">
-        <div class="max-w-7xl mx-auto px-8 w-full flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <img src="https://i.pinimg.com/736x/80/8d/f0/808df0e1d0d32768a4a5fdf6b5e8f5ec.jpg" alt="Logo" class="w-14 h-14 rounded-full border-4 border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.5)]">
-                <span class="font-orbitron font-black text-3xl tracking-tighter uppercase italic">O <span class="text-green-500">CURSO</span></span>
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-xl border-b-2 border-green-500/20 h-20 sm:h-24 flex items-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 w-full flex items-center justify-between">
+            <div class="flex items-center gap-2 sm:gap-4">
+                <div class="w-10 h-10 sm:w-14 h-14 rounded-full overflow-hidden border-2 sm:border-4 border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.5)]">
+                    <img src="https://i.pinimg.com/736x/80/8d/f0/808df0e1d0d32768a4a5fdf6b5e8f5ec.jpg" alt="Logo" class="w-full h-full object-cover">
+                </div>
+                <span class="font-orbitron font-black text-xl sm:text-3xl tracking-tighter uppercase italic">O <span class="text-green-500">CURSO</span></span>
             </div>
-            <div class="hidden md:flex gap-12 font-orbitron text-xs font-black tracking-[0.3em] uppercase text-gray-400 italic">
+            <div class="hidden lg:flex gap-8 xl:gap-12 font-orbitron text-[10px] xl:text-xs font-black tracking-[0.3em] uppercase text-gray-400 italic">
                 <a href="#inicio" class="hover:text-green-500 transition-colors">Início</a>
                 <a href="#curso" class="hover:text-green-500 transition-colors">Grade</a>
                 <a href="#depoimentos" class="hover:text-green-500 transition-colors">Relatórios</a>
                 <a href="#certificado" class="hover:text-green-500 transition-colors">Diploma</a>
             </div>
-            <button onclick="startEnroll()" class="bg-green-600 hover:bg-green-500 text-black font-black px-8 py-3 rounded-full font-orbitron text-sm transition-all transform hover:scale-110 shadow-[0_0_25px_rgba(34,197,94,0.4)] uppercase italic">MATRICULE-SE</button>
+            <button onclick="startEnroll()" class="bg-green-600 hover:bg-green-500 text-black font-black px-4 py-2 sm:px-8 sm:py-3 rounded-full font-orbitron text-xs sm:text-sm transition-all transform hover:scale-105 shadow-[0_0_25px_rgba(34,197,94,0.4)] uppercase italic">MATRICULE-SE</button>
         </div>
     </nav>
 
     <!-- Main Content -->
     <main id="root"></main>
 
-    <!-- Cartoon Network Logo - Bottom Left -->
-    <div class="fixed bottom-6 left-6 z-[60] group">
-        <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/20 shadow-2xl group-hover:shadow-[0_0_30px_rgba(34,197,94,0.6)] transition-all">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/Cartoon_Network_2010_logo.svg" alt="CN" class="w-16 md:w-24 h-auto">
+    <!-- Cartoon Network Logo - Bottom Left (Mobile Responsive) -->
+    <div class="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-[60] group pointer-events-none sm:pointer-events-auto">
+        <div class="bg-white/10 backdrop-blur-md p-2 sm:p-3 rounded-lg sm:rounded-xl border border-white/20 shadow-2xl group-hover:shadow-[0_0_30px_rgba(34,197,94,0.6)] transition-all">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/Cartoon_Network_2010_logo.svg" alt="CN" class="w-12 sm:w-24 h-auto">
         </div>
     </div>
 
@@ -202,7 +210,7 @@
 
             useEffect(() => {
                 if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-            }, [messages]);
+            }, [messages, isOpen]);
 
             const sendMessage = async () => {
                 if (!input.trim()) return;
@@ -226,15 +234,15 @@
             };
 
             return (
-                <div className="fixed bottom-6 right-6 w-80 md:w-96 z-[70]">
+                <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100%-2rem)] sm:w-80 md:w-96 z-[70]">
                     {isOpen && (
-                        <div className="bg-neutral-900 border-2 border-green-500 rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(34,197,94,0.3)] flex flex-col h-[450px] mb-4">
-                            <div className="bg-green-600 p-4 flex items-center justify-between">
+                        <div className="bg-neutral-900 border-2 border-green-500 rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(34,197,94,0.3)] flex flex-col h-[400px] sm:h-[450px] mb-4">
+                            <div className="bg-green-600 p-3 sm:p-4 flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                     <img src="https://picsum.photos/seed/azmuth/50/50" className="w-8 h-8 rounded-full border border-black" />
-                                    <span className="text-black font-bold font-orbitron uppercase italic text-sm">Azmuth (IA)</span>
+                                    <span className="text-black font-bold font-orbitron uppercase italic text-xs sm:text-sm">Azmuth (IA)</span>
                                 </div>
-                                <button onClick={() => setIsOpen(false)} className="text-black font-black">X</button>
+                                <button onClick={() => setIsOpen(false)} className="text-black font-black p-1">X</button>
                             </div>
                             <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-black/40 scrollbar-hide">
                                 {messages.map((m, i) => (
@@ -246,15 +254,15 @@
                                 ))}
                             </div>
                             <div className="p-3 border-t border-neutral-800 flex gap-2">
-                                <input value={input} onChange={e => setInput(e.target.value)} onKeyPress={e => e.key === 'Enter' && sendMessage()} placeholder="Fale com o Primeiro Pensador..." className="flex-1 bg-neutral-800 text-white text-sm p-2 rounded-lg outline-none border border-transparent focus:border-green-500" />
+                                <input value={input} onChange={e => setInput(e.target.value)} onKeyPress={e => e.key === 'Enter' && sendMessage()} placeholder="Fale com Azmuth..." className="flex-1 bg-neutral-800 text-white text-xs sm:text-sm p-2 rounded-lg outline-none border border-transparent focus:border-green-500" />
                                 <button onClick={sendMessage} className="bg-green-600 p-2 rounded-lg hover:bg-green-500">
                                     <svg className="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
                                 </button>
                             </div>
                         </div>
                     )}
-                    <button onClick={() => setIsOpen(!isOpen)} className="float-right w-16 h-16 bg-green-600 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.6)] border-4 border-black group">
-                        <img src="https://picsum.photos/seed/azmuth/50/50" className="w-12 h-12 rounded-full group-hover:scale-110 transition-transform" />
+                    <button onClick={() => setIsOpen(!isOpen)} className="float-right w-14 h-14 sm:w-16 sm:h-16 bg-green-600 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.6)] border-4 border-black group transition-all active:scale-90">
+                        <img src="https://picsum.photos/seed/azmuth/50/50" className="w-10 h-10 sm:w-12 sm:h-12 rounded-full group-hover:scale-110 transition-transform" />
                     </button>
                 </div>
             );
@@ -264,65 +272,71 @@
         const Page = () => {
             return (
                 <>
-                    <section id="inicio" className="pt-48 pb-32 px-8">
-                        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
+                    <section id="inicio" className="pt-28 sm:pt-48 pb-16 sm:pb-32 px-4 sm:px-8">
+                        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 sm:gap-20 items-center">
                             <div className="text-left">
-                                <span className="inline-block px-5 py-2 bg-green-500/10 border-2 border-green-500 text-green-500 rounded-full text-xs font-black font-orbitron mb-8 animate-pulse tracking-[0.2em] italic uppercase">SISTEMA OMNITRIX CALIBRADO</span>
-                                <h1 className="text-6xl md:text-8xl font-orbitron font-black mb-8 leading-none italic tracking-tighter uppercase">TORNE-SE UM <br/><span className="text-neon">ENCANADOR</span></h1>
-                                <p className="text-2xl text-gray-300 mb-12 max-w-xl leading-relaxed font-semibold">Aprenda as artes marciais intergalácticas e o manejo técnico do dispositivo mais poderoso de Azmuth.</p>
-                                <button onClick={window.startEnroll} className="px-10 py-5 bg-green-600 text-black font-black rounded-2xl font-orbitron text-lg hover:bg-green-500 transition-all shadow-[0_0_40px_rgba(34,197,94,0.5)] uppercase tracking-wider italic">RECRUTAR AGORA</button>
+                                <span className="inline-block px-4 py-1.5 sm:px-5 sm:py-2 bg-green-500/10 border-2 border-green-500 text-green-500 rounded-full text-[10px] sm:text-xs font-black font-orbitron mb-6 sm:mb-8 animate-pulse tracking-[0.2em] italic uppercase">SISTEMA OMNITRIX CALIBRADO</span>
+                                <h1 className="hero-title text-4xl sm:text-6xl md:text-8xl font-orbitron font-black mb-6 sm:mb-8 leading-none italic tracking-tighter uppercase">TORNE-SE UM <br/><span className="text-neon">ENCANADOR</span></h1>
+                                <p className="text-lg sm:text-2xl text-gray-300 mb-8 sm:mb-12 max-w-xl leading-relaxed font-semibold">Aprenda as artes marciais intergalácticas e o manejo técnico do dispositivo mais poderoso de Azmuth.</p>
+                                <button onClick={window.startEnroll} className="w-full sm:w-auto px-8 py-4 sm:px-10 sm:py-5 bg-green-600 text-black font-black rounded-xl sm:rounded-2xl font-orbitron text-base sm:text-lg hover:bg-green-500 transition-all shadow-[0_0_40px_rgba(34,197,94,0.5)] uppercase tracking-wider italic">RECRUTAR AGORA</button>
                             </div>
                             <div className="flex flex-col items-center">
-                                <div id="dial" className="w-72 h-72 md:w-96 md:h-96 rounded-full border-[12px] border-neutral-800 bg-neutral-900 relative shadow-[0_0_60px_rgba(0,0,0,1)] flex items-center justify-center cursor-pointer transition-transform duration-700 omnitrix-dial-glow" onClick={window.rotateDial}>
+                                <div id="dial" className="w-64 h-64 sm:w-72 sm:h-72 md:w-96 md:h-96 rounded-full border-[8px] sm:border-[12px] border-neutral-800 bg-neutral-900 relative shadow-[0_0_60px_rgba(0,0,0,1)] flex items-center justify-center cursor-pointer transition-transform duration-700 omnitrix-dial-glow active:scale-95" onClick={window.rotateDial}>
                                     <div className="absolute inset-0 bg-green-500/5 rounded-full"></div>
-                                    <div className="w-36 h-36 md:w-48 md:h-48 bg-green-500 rounded-full flex items-center justify-center shadow-[0_0_80px_rgba(34,197,94,0.8)] z-10 border-8 border-black overflow-hidden">
+                                    <div className="w-28 h-28 sm:w-36 sm:h-36 md:w-48 md:h-48 bg-green-500 rounded-full flex items-center justify-center shadow-[0_0_80px_rgba(34,197,94,0.8)] z-10 border-4 sm:border-8 border-black overflow-hidden">
                                         <img src="https://i.pinimg.com/736x/80/8d/f0/808df0e1d0d32768a4a5fdf6b5e8f5ec.jpg" className="w-full h-full object-cover" />
                                     </div>
                                     {[0, 90, 180, 270].map(deg => (
-                                        <div key={deg} className="absolute w-6 h-12 bg-green-600 rounded-lg shadow-[0_0_15px_rgba(34,197,94,1)] border-2 border-black" style={{ transform: `rotate(${deg}deg) translateY(-160px)` }}></div>
+                                        <div key={deg} className="absolute w-4 h-8 sm:w-6 sm:h-12 bg-green-600 rounded-lg shadow-[0_0_15px_rgba(34,197,94,1)] border-2 border-black" style={{ transform: `rotate(${deg}deg) translateY(-110px)` }}></div>
                                     ))}
+                                    {/* Responsive translateY fix for larger screens */}
+                                    <style>{`
+                                        @media (min-width: 768px) {
+                                            #dial > div[style*="translateY"] { transform: rotate(var(--tw-rotate)) translateY(-160px) !important; }
+                                        }
+                                    `}</style>
                                 </div>
-                                <button onClick={window.triggerTransform} className="mt-12 px-12 py-4 bg-green-600 hover:bg-green-500 text-black font-black rounded-full transition-all hover:scale-110 shadow-[0_0_30px_rgba(34,197,94,0.6)] uppercase tracking-[0.2em] font-orbitron italic text-lg">É Hora do Herói!</button>
+                                <button onClick={window.triggerTransform} className="mt-8 sm:mt-12 px-8 py-3 sm:px-12 sm:py-4 bg-green-600 hover:bg-green-500 text-black font-black rounded-full transition-all hover:scale-110 shadow-[0_0_30px_rgba(34,197,94,0.6)] uppercase tracking-[0.2em] font-orbitron italic text-base sm:text-lg">É Hora do Herói!</button>
                             </div>
                         </div>
                     </section>
 
-                    <section id="curso" className="py-32 px-8 bg-black/40 border-y-2 border-green-500/10">
+                    <section id="curso" className="py-16 sm:py-32 px-4 sm:px-8 bg-black/40 border-y-2 border-green-500/10">
                         <div className="max-w-7xl mx-auto">
-                            <h2 className="text-5xl font-orbitron font-black mb-16 uppercase tracking-tighter italic text-center">Grade <span className="text-neon">Acadêmica</span></h2>
-                            <div className="grid md:grid-cols-3 gap-8">
+                            <h2 className="text-3xl sm:text-5xl font-orbitron font-black mb-12 sm:mb-16 uppercase tracking-tighter italic text-center">Grade <span className="text-neon">Acadêmica</span></h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                                 {MODULES.map(m => (
-                                    <div key={m.id} className="bg-neutral-900/50 border border-green-500/30 p-8 rounded-2xl hover:border-green-400 transition-all group backdrop-blur-sm text-left">
+                                    <div key={m.id} className="bg-neutral-900/50 border border-green-500/30 p-6 sm:p-8 rounded-2xl hover:border-green-400 transition-all group backdrop-blur-sm text-left">
                                         <div className="flex items-center gap-4 mb-6">
-                                            <div className="w-14 h-14 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500 font-bold text-2xl font-orbitron border border-green-500/20">{m.id}</div>
-                                            <h3 className="text-2xl font-black font-orbitron group-hover:text-neon uppercase italic tracking-tighter">${m.title}</h3>
+                                            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500 font-bold text-xl sm:text-2xl font-orbitron border border-green-500/20">{m.id}</div>
+                                            <h3 className="text-xl sm:text-2xl font-black font-orbitron group-hover:text-neon uppercase italic tracking-tighter">{m.title}</h3>
                                         </div>
-                                        <p className="text-gray-400 mb-8 font-medium">{m.desc}</p>
-                                        <ul className="space-y-4 mb-8">
+                                        <p className="text-sm sm:text-base text-gray-400 mb-6 sm:mb-8 font-medium">{m.desc}</p>
+                                        <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
                                             {m.topics.map((t, idx) => (
-                                                <li key={idx} className="flex items-center gap-3 text-sm text-gray-300 font-semibold"><span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,1)]"></span>{t}</li>
+                                                <li key={idx} className="flex items-center gap-3 text-xs sm:text-sm text-gray-300 font-semibold"><span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,1)]"></span>{t}</li>
                                             ))}
                                         </ul>
-                                        <button onClick={window.startEnroll} className="w-full py-3 bg-transparent border-2 border-green-600 text-green-500 hover:bg-green-600 hover:text-black font-black rounded-xl transition-all font-orbitron italic uppercase text-xs tracking-widest">Acessar Módulo</button>
+                                        <button onClick={window.startEnroll} className="w-full py-3 bg-transparent border-2 border-green-600 text-green-500 hover:bg-green-600 hover:text-black font-black rounded-xl transition-all font-orbitron italic uppercase text-[10px] sm:text-xs tracking-widest">Acessar Módulo</button>
                                     </div>
                                 ))}
                             </div>
                         </div>
                     </section>
 
-                    <section id="depoimentos" className="py-32 px-8 relative bg-black/20">
+                    <section id="depoimentos" className="py-16 sm:py-32 px-4 sm:px-8 relative bg-black/20">
                         <div className="max-w-7xl mx-auto">
-                            <h2 className="text-5xl font-orbitron font-black mb-24 uppercase tracking-tighter italic text-center">Relatórios de <span className="text-neon">Agentes</span></h2>
-                            <div className="flex flex-col gap-24">
+                            <h2 className="text-3xl sm:text-5xl font-orbitron font-black mb-16 sm:mb-24 uppercase tracking-tighter italic text-center">Relatórios de <span className="text-neon">Agentes</span></h2>
+                            <div className="flex flex-col gap-12 sm:gap-24">
                                 {TESTIMONIALS.map(t => (
                                     <div key={t.id} className="group relative max-w-4xl mx-auto w-full">
-                                        <div className="relative bg-neutral-900/80 border-2 border-green-500/20 p-10 md:p-16 rounded-[3rem] transition-all flex flex-col items-center shadow-3xl backdrop-blur-xl hover:border-green-500/50 overflow-hidden">
-                                            <div className="w-full mb-12 rounded-3xl overflow-hidden border-4 border-green-500/20 shadow-2xl bg-black flex items-center justify-center">
+                                        <div className="relative bg-neutral-900/80 border-2 border-green-500/20 p-6 sm:p-10 md:p-16 rounded-[2rem] sm:rounded-[3rem] transition-all flex flex-col items-center shadow-3xl backdrop-blur-xl hover:border-green-500/50 overflow-hidden">
+                                            <div className="w-full max-h-[400px] sm:max-h-[600px] mb-8 sm:mb-12 rounded-2xl sm:rounded-3xl overflow-hidden border-4 border-green-500/20 shadow-2xl bg-black flex items-center justify-center">
                                                 <img src={t.img} className="w-full h-auto block transform group-hover:scale-105 transition-transform duration-[3s]" />
                                             </div>
-                                            <div className="text-center">
-                                                <h4 className="font-orbitron font-black text-3xl text-green-500 uppercase italic mb-6">{t.name}</h4>
-                                                <p className="text-2xl text-gray-300 italic font-semibold max-w-2xl mx-auto">"{t.text}"</p>
+                                            <div className="text-center px-4">
+                                                <h4 className="font-orbitron font-black text-2xl sm:text-3xl text-green-500 uppercase italic mb-4 sm:mb-6">{t.name}</h4>
+                                                <p className="text-lg sm:text-2xl text-gray-300 italic font-semibold max-w-2xl mx-auto">"{t.text}"</p>
                                             </div>
                                         </div>
                                     </div>
@@ -331,22 +345,22 @@
                         </div>
                     </section>
 
-                    <section id="certificado" className="py-32 px-8 bg-gradient-to-t from-green-900/30 to-transparent">
-                        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-20 items-center">
+                    <section id="certificado" className="py-16 sm:py-32 px-4 sm:px-8 bg-gradient-to-t from-green-900/30 to-transparent">
+                        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 sm:gap-20 items-center">
                             <div className="text-left">
-                                <h2 className="text-5xl font-orbitron font-black mb-8 uppercase tracking-tighter italic leading-tight">Mestre do <br/><span className="text-neon">Omnitrix</span></h2>
-                                <p className="text-gray-300 text-xl mb-12 leading-relaxed font-medium italic">Certificação oficial válida em todos os quadrantes da Federação Galáctica. Assinatura molecular inclusiva.</p>
-                                <div className="space-y-6">
-                                    <div className="flex items-center gap-6 bg-black/60 p-6 rounded-2xl border-l-8 border-green-500 shadow-xl"><div className="text-green-500 text-3xl">✔</div><span className="font-black font-orbitron text-sm tracking-widest italic uppercase">Código de DNA Verificado</span></div>
-                                    <div className="flex items-center gap-6 bg-black/60 p-6 rounded-2xl border-l-8 border-green-500 shadow-xl"><div className="text-green-500 text-3xl">✔</div><span className="font-black font-orbitron text-sm tracking-widest italic uppercase">Protocolo de Paz Ativo</span></div>
+                                <h2 className="text-3xl sm:text-5xl font-orbitron font-black mb-6 sm:mb-8 uppercase tracking-tighter italic leading-tight">Mestre do <br/><span className="text-neon">Omnitrix</span></h2>
+                                <p className="text-base sm:text-xl text-gray-300 mb-8 sm:mb-12 leading-relaxed font-medium italic">Certificação oficial válida em todos os quadrantes da Federação Galáctica. Assinatura molecular inclusiva.</p>
+                                <div className="space-y-4 sm:space-y-6">
+                                    <div className="flex items-center gap-4 sm:gap-6 bg-black/60 p-4 sm:p-6 rounded-xl sm:rounded-2xl border-l-4 sm:border-l-8 border-green-500 shadow-xl"><div className="text-green-500 text-2xl sm:text-3xl">✔</div><span className="font-black font-orbitron text-xs sm:text-sm tracking-widest italic uppercase">Código de DNA Verificado</span></div>
+                                    <div className="flex items-center gap-4 sm:gap-6 bg-black/60 p-4 sm:p-6 rounded-xl sm:rounded-2xl border-l-4 sm:border-l-8 border-green-500 shadow-xl"><div className="text-green-500 text-2xl sm:text-3xl">✔</div><span className="font-black font-orbitron text-xs sm:text-sm tracking-widest italic uppercase">Protocolo de Paz Ativo</span></div>
                                 </div>
                             </div>
                             <div className="relative group cursor-pointer" onClick={window.downloadCert}>
-                                <div className="absolute -inset-6 bg-green-500/30 blur-[60px] opacity-0 group-hover:opacity-100 transition duration-700"></div>
-                                <div className="relative bg-neutral-900 border-8 border-green-500/50 p-6 rounded-[2rem] shadow-2xl transform transition-transform group-hover:rotate-2 group-hover:scale-105">
+                                <div className="absolute -inset-6 bg-green-500/30 blur-[40px] sm:blur-[60px] opacity-0 group-hover:opacity-100 transition duration-700"></div>
+                                <div className="relative bg-neutral-900 border-4 sm:border-8 border-green-500/50 p-4 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] shadow-2xl transform transition-transform group-hover:rotate-2 group-hover:scale-105">
                                     <img src="https://pt.quizur.com/_image?href=https%3A%2F%2Fdev-beta.quizur.com%2Fstorage%2Fv1%2Fobject%2Fpublic%2F%2Fimagens%2F%2F20146386%2F750a8375-7e7a-49a4-b92d-1829733bb9f7.png&w=600&h=600&f=webp" className="w-full rounded-xl" />
                                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
-                                        <span className="text-green-500 font-orbitron font-black text-2xl uppercase italic drop-shadow-lg">BAIXAR ARQUIVO</span>
+                                        <span className="text-green-500 font-orbitron font-black text-xl sm:text-2xl uppercase italic drop-shadow-lg">BAIXAR ARQUIVO</span>
                                     </div>
                                 </div>
                             </div>
