@@ -50,6 +50,7 @@
 {
   "imports": {
     "react": "https://esm.sh/react@^19.2.4",
+    "react-dom": "https://esm.sh/react-dom@^19.2.4/client",
     "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
     "react/": "https://esm.sh/react@^19.2.4/",
     "@google/genai": "https://esm.sh/@google/genai@^1.41.0"
@@ -118,119 +119,22 @@
     </nav>
 
     <!-- Main Content -->
-    <main>
-        <!-- Hero Section -->
-        <section id="inicio" class="pt-48 pb-32 px-8">
-            <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
-                <div class="relative z-10 text-left">
-                    <span class="inline-block px-5 py-2 bg-green-500/10 border-2 border-green-500 text-green-500 rounded-full text-xs font-black font-orbitron mb-8 animate-pulse tracking-[0.2em] italic uppercase">SISTEMA OMNITRIX CALIBRADO</span>
-                    <h1 class="text-6xl md:text-8xl font-orbitron font-black mb-8 leading-none italic tracking-tighter uppercase">TORNE-SE UM <br><span class="text-neon">ENCANADOR</span></h1>
-                    <p class="text-2xl text-gray-300 mb-12 max-w-xl leading-relaxed font-semibold">Aprenda as artes marciais intergalácticas e o manejo técnico do dispositivo mais poderoso de Azmuth.</p>
-                    <button onclick="startEnroll()" class="px-10 py-5 bg-green-600 text-black font-black rounded-2xl font-orbitron text-lg hover:bg-green-500 transition-all shadow-[0_0_40px_rgba(34,197,94,0.5)] uppercase tracking-wider italic">RECRUTAR AGORA</button>
-                </div>
-                <div class="relative flex flex-col items-center">
-                    <div id="dial" class="w-72 h-72 md:w-96 md:h-96 rounded-full border-[12px] border-neutral-800 bg-neutral-900 relative shadow-[0_0_60px_rgba(0,0,0,1)] flex items-center justify-center cursor-pointer transition-transform duration-700 omnitrix-dial-glow" onclick="rotateDial()">
-                        <div class="absolute inset-0 bg-green-500/5 rounded-full"></div>
-                        <div class="w-36 h-36 md:w-48 md:h-48 bg-green-500 rounded-full flex items-center justify-center shadow-[0_0_80px_rgba(34,197,94,0.8)] z-10 border-8 border-black overflow-hidden">
-                            <img src="https://i.pinimg.com/736x/80/8d/f0/808df0e1d0d32768a4a5fdf6b5e8f5ec.jpg" class="w-full h-full object-cover">
-                        </div>
-                        <div class="absolute w-6 h-12 bg-green-600 rounded-lg shadow-[0_0_15px_rgba(34,197,94,1)] border-2 border-black" style="transform: rotate(0deg) translateY(-160px)"></div>
-                        <div class="absolute w-6 h-12 bg-green-600 rounded-lg shadow-[0_0_15px_rgba(34,197,94,1)] border-2 border-black" style="transform: rotate(90deg) translateY(-160px)"></div>
-                        <div class="absolute w-6 h-12 bg-green-600 rounded-lg shadow-[0_0_15px_rgba(34,197,94,1)] border-2 border-black" style="transform: rotate(180deg) translateY(-160px)"></div>
-                        <div class="absolute w-6 h-12 bg-green-600 rounded-lg shadow-[0_0_15px_rgba(34,197,94,1)] border-2 border-black" style="transform: rotate(270deg) translateY(-160px)"></div>
-                    </div>
-                    <button onclick="triggerTransform()" class="mt-12 px-12 py-4 bg-green-600 hover:bg-green-500 text-black font-black rounded-full transition-all hover:scale-110 shadow-[0_0_30px_rgba(34,197,94,0.6)] uppercase tracking-[0.2em] font-orbitron italic text-lg">É Hora do Herói!</button>
-                </div>
-            </div>
-        </section>
+    <main id="root"></main>
 
-        <!-- Modules Section -->
-        <section id="curso" class="py-32 px-8 bg-black/40 border-y-2 border-green-500/10">
-            <div class="max-w-7xl mx-auto">
-                <h2 class="text-5xl font-orbitron font-black mb-16 uppercase tracking-tighter italic text-center">Grade <span class="text-neon">Acadêmica</span></h2>
-                <div class="grid md:grid-cols-3 gap-8" id="modules-container">
-                    <!-- JS Injected Cards -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Testimonials -->
-        <section id="depoimentos" class="py-32 px-8 relative bg-black/20">
-            <div class="max-w-7xl mx-auto">
-                <h2 class="text-5xl font-orbitron font-black mb-24 uppercase tracking-tighter italic text-center">Relatórios de <span class="text-neon">Agentes</span></h2>
-                <div class="flex flex-col gap-24" id="testimonials-container">
-                    <!-- JS Injected Testimonials -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Certificate Section -->
-        <section id="certificado" class="py-32 px-8 bg-gradient-to-t from-green-900/30 to-transparent">
-            <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-20 items-center">
-                <div class="text-left">
-                    <h2 class="text-5xl font-orbitron font-black mb-8 uppercase tracking-tighter italic leading-tight">Mestre do <br><span class="text-neon">Omnitrix</span></h2>
-                    <p class="text-gray-300 text-xl mb-12 leading-relaxed font-medium italic">Certificação oficial válida em todos os quadrantes da Federação Galáctica. Assinatura molecular inclusiva.</p>
-                    <div class="space-y-6">
-                        <div class="flex items-center gap-6 bg-black/60 p-6 rounded-2xl border-l-8 border-green-500 shadow-xl"><div class="text-green-500 text-3xl">✔</div><span class="font-black font-orbitron text-sm tracking-widest italic uppercase">Código de DNA Verificado</span></div>
-                        <div class="flex items-center gap-6 bg-black/60 p-6 rounded-2xl border-l-8 border-green-500 shadow-xl"><div class="text-green-500 text-3xl">✔</div><span class="font-black font-orbitron text-sm tracking-widest italic uppercase">Protocolo de Paz Ativo</span></div>
-                    </div>
-                </div>
-                <div class="relative group cursor-pointer" onclick="downloadCert()">
-                    <div class="absolute -inset-6 bg-green-500/30 blur-[60px] opacity-0 group-hover:opacity-100 transition duration-700"></div>
-                    <div class="relative bg-neutral-900 border-8 border-green-500/50 p-6 rounded-[2rem] shadow-2xl transform transition-transform group-hover:rotate-2 group-hover:scale-105">
-                        <img src="https://pt.quizur.com/_image?href=https%3A%2F%2Fdev-beta.quizur.com%2Fstorage%2Fv1%2Fobject%2Fpublic%2F%2Fimagens%2F%2F20146386%2F750a8375-7e7a-49a4-b92d-1829733bb9f7.png&w=600&h=600&f=webp" class="w-full rounded-xl">
-                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
-                            <span class="text-green-500 font-orbitron font-black text-2xl uppercase italic drop-shadow-lg">BAIXAR ARQUIVO</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="py-20 px-8 border-t-2 border-green-500/10 bg-black/95">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
-            <div class="flex items-center gap-4">
-                <img src="https://i.pinimg.com/736x/80/8d/f0/808df0e1d0d32768a4a5fdf6b5e8f5ec.jpg" alt="Logo" class="w-12 h-12 rounded-full border-2 border-green-500 shadow-[0_0_15px_rgba(34,197,94,0.8)]">
-                <span class="font-orbitron font-black text-2xl tracking-tighter uppercase italic">O <span class="text-green-500">CURSO</span></span>
-            </div>
-            <p class="text-gray-500 text-sm font-bold tracking-widest uppercase italic">© 2024 Base do Setor 2814. Protocolos de Encanador Ativos.</p>
-        </div>
-    </footer>
-
-    <!-- Cartoon Network Logo - Bottom Right -->
+    <!-- Cartoon Network Logo - Bottom Left -->
     <div class="fixed bottom-6 left-6 z-[60] group">
         <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/20 shadow-2xl group-hover:shadow-[0_0_30px_rgba(34,197,94,0.6)] transition-all">
             <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/Cartoon_Network_2010_logo.svg" alt="CN" class="w-16 md:w-24 h-auto">
         </div>
     </div>
 
-    <!-- Azmuth AI Chat -->
-    <div class="fixed bottom-6 right-6 w-80 md:w-96 z-[70]">
-        <div id="chat-box" class="hidden bg-neutral-900 border-2 border-green-500 rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(34,197,94,0.3)] flex flex-col h-[450px]">
-            <div class="bg-green-600 p-4 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <img src="https://picsum.photos/seed/azmuth/50/50" class="w-8 h-8 rounded-full border border-black">
-                    <span class="text-black font-bold font-orbitron uppercase italic text-sm">Azmuth (IA)</span>
-                </div>
-                <button onclick="toggleChat()" class="text-black font-black">X</button>
-            </div>
-            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-black/40 scrollbar-hide">
-                <div class="flex justify-start"><div class="bg-green-900/40 text-green-100 p-3 rounded-lg text-sm border-r-4 border-green-600 italic">"Hmph. Mais um recruta curioso. O que você quer saber sobre minha obra-prima?"</div></div>
-            </div>
-            <div class="p-3 border-t border-neutral-800 flex gap-2">
-                <input id="chat-input" type="text" placeholder="Fale com o Primeiro Pensador..." class="flex-1 bg-neutral-800 text-white text-sm p-2 rounded-lg outline-none border border-transparent focus:border-green-500">
-                <button onclick="sendMessage()" class="bg-green-600 p-2 rounded-lg hover:bg-green-500"><svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg></button>
-            </div>
-        </div>
-        <button id="chat-toggle" onclick="toggleChat()" class="float-right w-16 h-16 bg-green-600 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.6)] border-4 border-black group">
-            <img src="https://picsum.photos/seed/azmuth/50/50" class="w-12 h-12 rounded-full group-hover:scale-110 transition-transform">
-        </button>
-    </div>
+    <!-- Azmuth AI Chat Placeholder -->
+    <div id="chat-root"></div>
 
     <!-- Scripts -->
     <script type="module">
+        import React, { useState, useEffect, useRef } from 'react';
+        import ReactDOM from 'react-dom';
         import { GoogleGenAI } from "@google/genai";
 
         // Constants
@@ -242,14 +146,16 @@
 
         const TESTIMONIALS = [
             { id: 1, name: "Ricardo Oliveira", text: "O conteúdo sobre calibração é superior a tudo na rede.", img: "https://pbs.twimg.com/media/EA-VOc1XUAA9EbP?format=jpg&name=medium" },
-            { id: 2, name: "Ana Luíza Santos", text: "Excelente didática para as transformações!", img: "https://pt.quizur.com/_image?href=https%3A%2F%2Fdev-beta.quizur.com%2Fstorage%2Fv1%2Fobject%2Fpublic%2F%2Fimagens%2F%2F20972455%2Fff18dec9-fcce-4766-be62-88f4effd3792.png&w=600&h=600&f=webp" }
+            { id: 2, name: "Ana Luíza Santos", text: "Excelente didática para as transformações!", img: "https://pt.quizur.com/_image?href=https%3A%2F%2Fdev-beta.quizur.com%2Fstorage%2Fv1%2Fobject%2Fpublic%2F%2Fimagens%2F%2F20972455%2Fff18dec9-fcce-4766-be62-88f4effd3792.png&w=600&h=600&f=webp" },
+            { id: 3, name: "Marcos Vinícius", text: "O suporte aos alunos é impecável. Tive uma dúvida sobre o Modo Mestre e fui respondido em menos de 10 minutos.", img: "https://pt.quizur.com/_image?href=https%3A%2F%2Fdev-beta.quizur.com%2Fstorage%2Fv1%2Fobject%2Fpublic%2F%2Fimagens%2F%2F20101249%2F31fd7fc1-9825-4f2e-8a62-e3c2bef948e7.png&w=600&h=600&f=webp" },
+            { id: 4, name: "Juliana Costa", text: "Completei o curso em 3 meses e já me sinto preparada para missões de campo.", img: "https://i.pinimg.com/736x/52/cd/95/52cd95d6c3b56977cf2efc20f6169405.jpg" }
         ];
 
-        // Global State & UI Functions
-        window.rotation = 0;
+        // Global functions for non-react parts
         window.rotateDial = () => {
-            window.rotation += 45;
-            document.getElementById('dial').style.transform = `rotate(${window.rotation}deg)`;
+            const dial = document.getElementById('dial');
+            window.rotation = (window.rotation || 0) + 45;
+            dial.style.transform = `rotate(${window.rotation}deg)`;
         };
 
         window.triggerTransform = () => {
@@ -259,7 +165,8 @@
         };
 
         window.startEnroll = () => {
-            document.getElementById('enroll-modal').style.display = 'flex';
+            const modal = document.getElementById('enroll-modal');
+            modal.style.display = 'flex';
             const bar = document.getElementById('progress-bar');
             const status = document.getElementById('enroll-status');
             const success = document.getElementById('enroll-success');
@@ -267,7 +174,6 @@
             bar.style.width = '0%';
             status.classList.remove('hidden');
             success.classList.add('hidden');
-
             const interval = setInterval(() => {
                 progress += 2;
                 bar.style.width = `${progress}%`;
@@ -285,78 +191,176 @@
             document.getElementById('member-area').style.display = 'flex';
         };
         window.closeMemberArea = () => document.getElementById('member-area').style.display = 'none';
-        window.downloadCert = () => alert('Sincronizando código de barras galáctico... Download iniciado!');
+        window.downloadCert = () => alert('Transferência de código diplomático iniciada...');
 
-        window.toggleChat = () => {
-            const box = document.getElementById('chat-box');
-            const toggle = document.getElementById('chat-toggle');
-            box.classList.toggle('hidden');
-            toggle.classList.toggle('hidden');
+        // Azmuth Chat Component
+        const AzmuthChat = () => {
+            const [isOpen, setIsOpen] = useState(false);
+            const [messages, setMessages] = useState([{ role: 'azmuth', content: "Hmph. Mais um recruta curioso. O que você quer saber sobre minha obra-prima?" }]);
+            const [input, setInput] = useState('');
+            const scrollRef = useRef(null);
+
+            useEffect(() => {
+                if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+            }, [messages]);
+
+            const sendMessage = async () => {
+                if (!input.trim()) return;
+                const userText = input;
+                setInput('');
+                setMessages(prev => [...prev, { role: 'user', content: userText }]);
+
+                try {
+                    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+                    const response = await ai.models.generateContent({
+                        model: 'gemini-3-flash-preview',
+                        contents: userText,
+                        config: {
+                            systemInstruction: "Você é Azmuth, o criador do Omnitrix. Você é brilhante, impaciente mas ensina recrutas Encanadores. Responda em português, use termos do universo Ben 10 e seja um pouco arrogante porém útil.",
+                        }
+                    });
+                    setMessages(prev => [...prev, { role: 'azmuth', content: response.text }]);
+                } catch (err) {
+                    setMessages(prev => [...prev, { role: 'azmuth', content: "Minha conexão galáctica falhou. Tente novamente." }]);
+                }
+            };
+
+            return (
+                <div className="fixed bottom-6 right-6 w-80 md:w-96 z-[70]">
+                    {isOpen && (
+                        <div className="bg-neutral-900 border-2 border-green-500 rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(34,197,94,0.3)] flex flex-col h-[450px] mb-4">
+                            <div className="bg-green-600 p-4 flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <img src="https://picsum.photos/seed/azmuth/50/50" className="w-8 h-8 rounded-full border border-black" />
+                                    <span className="text-black font-bold font-orbitron uppercase italic text-sm">Azmuth (IA)</span>
+                                </div>
+                                <button onClick={() => setIsOpen(false)} className="text-black font-black">X</button>
+                            </div>
+                            <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-black/40 scrollbar-hide">
+                                {messages.map((m, i) => (
+                                    <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                        <div className={`p-3 rounded-lg text-sm ${m.role === 'user' ? 'bg-neutral-800 text-white border-l-4 border-green-500' : 'bg-green-900/40 text-green-100 border-r-4 border-green-600 italic'}`}>
+                                            {m.content}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="p-3 border-t border-neutral-800 flex gap-2">
+                                <input value={input} onChange={e => setInput(e.target.value)} onKeyPress={e => e.key === 'Enter' && sendMessage()} placeholder="Fale com o Primeiro Pensador..." className="flex-1 bg-neutral-800 text-white text-sm p-2 rounded-lg outline-none border border-transparent focus:border-green-500" />
+                                <button onClick={sendMessage} className="bg-green-600 p-2 rounded-lg hover:bg-green-500">
+                                    <svg className="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                    <button onClick={() => setIsOpen(!isOpen)} className="float-right w-16 h-16 bg-green-600 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.6)] border-4 border-black group">
+                        <img src="https://picsum.photos/seed/azmuth/50/50" className="w-12 h-12 rounded-full group-hover:scale-110 transition-transform" />
+                    </button>
+                </div>
+            );
         };
 
-        // Populate Content
-        const modulesCont = document.getElementById('modules-container');
-        MODULES.forEach(m => {
-            modulesCont.innerHTML += `
-                <div class="bg-neutral-900/50 border border-green-500/30 p-8 rounded-2xl hover:border-green-400 transition-all group backdrop-blur-sm text-left">
-                    <div class="flex items-center gap-4 mb-6">
-                        <div class="w-14 h-14 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500 font-bold text-2xl font-orbitron border border-green-500/20">${m.id}</div>
-                        <h3 class="text-2xl font-black font-orbitron group-hover:text-neon uppercase italic tracking-tighter">${m.title}</h3>
-                    </div>
-                    <p class="text-gray-400 mb-8 font-medium">${m.desc}</p>
-                    <ul class="space-y-4 mb-8">
-                        ${m.topics.map(t => `<li class="flex items-center gap-3 text-sm text-gray-300 font-semibold"><span class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,1)]"></span>${t}</li>`).join('')}
-                    </ul>
-                    <button onclick="startEnroll()" class="w-full py-3 bg-transparent border-2 border-green-600 text-green-500 hover:bg-green-600 hover:text-black font-black rounded-xl transition-all font-orbitron italic uppercase text-xs tracking-widest">Acessar Módulo</button>
-                </div>
-            `;
-        });
+        // Main Page Content Component
+        const Page = () => {
+            return (
+                <>
+                    <section id="inicio" className="pt-48 pb-32 px-8">
+                        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
+                            <div className="text-left">
+                                <span className="inline-block px-5 py-2 bg-green-500/10 border-2 border-green-500 text-green-500 rounded-full text-xs font-black font-orbitron mb-8 animate-pulse tracking-[0.2em] italic uppercase">SISTEMA OMNITRIX CALIBRADO</span>
+                                <h1 className="text-6xl md:text-8xl font-orbitron font-black mb-8 leading-none italic tracking-tighter uppercase">TORNE-SE UM <br/><span className="text-neon">ENCANADOR</span></h1>
+                                <p className="text-2xl text-gray-300 mb-12 max-w-xl leading-relaxed font-semibold">Aprenda as artes marciais intergalácticas e o manejo técnico do dispositivo mais poderoso de Azmuth.</p>
+                                <button onClick={window.startEnroll} className="px-10 py-5 bg-green-600 text-black font-black rounded-2xl font-orbitron text-lg hover:bg-green-500 transition-all shadow-[0_0_40px_rgba(34,197,94,0.5)] uppercase tracking-wider italic">RECRUTAR AGORA</button>
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <div id="dial" className="w-72 h-72 md:w-96 md:h-96 rounded-full border-[12px] border-neutral-800 bg-neutral-900 relative shadow-[0_0_60px_rgba(0,0,0,1)] flex items-center justify-center cursor-pointer transition-transform duration-700 omnitrix-dial-glow" onClick={window.rotateDial}>
+                                    <div className="absolute inset-0 bg-green-500/5 rounded-full"></div>
+                                    <div className="w-36 h-36 md:w-48 md:h-48 bg-green-500 rounded-full flex items-center justify-center shadow-[0_0_80px_rgba(34,197,94,0.8)] z-10 border-8 border-black overflow-hidden">
+                                        <img src="https://i.pinimg.com/736x/80/8d/f0/808df0e1d0d32768a4a5fdf6b5e8f5ec.jpg" className="w-full h-full object-cover" />
+                                    </div>
+                                    {[0, 90, 180, 270].map(deg => (
+                                        <div key={deg} className="absolute w-6 h-12 bg-green-600 rounded-lg shadow-[0_0_15px_rgba(34,197,94,1)] border-2 border-black" style={{ transform: `rotate(${deg}deg) translateY(-160px)` }}></div>
+                                    ))}
+                                </div>
+                                <button onClick={window.triggerTransform} className="mt-12 px-12 py-4 bg-green-600 hover:bg-green-500 text-black font-black rounded-full transition-all hover:scale-110 shadow-[0_0_30px_rgba(34,197,94,0.6)] uppercase tracking-[0.2em] font-orbitron italic text-lg">É Hora do Herói!</button>
+                            </div>
+                        </div>
+                    </section>
 
-        const testCont = document.getElementById('testimonials-container');
-        TESTIMONIALS.forEach(t => {
-            testCont.innerHTML += `
-                <div class="bg-neutral-900/80 border-2 border-green-500/20 p-10 md:p-16 rounded-[3rem] transition-all flex flex-col items-center shadow-3xl backdrop-blur-xl hover:border-green-500/50">
-                    <div class="w-full h-80 mb-12 rounded-3xl overflow-hidden border-4 border-green-500/20 shadow-2xl">
-                        <img src="${t.img}" class="w-full h-full object-cover">
-                    </div>
-                    <div class="text-center">
-                        <h4 class="font-orbitron font-black text-3xl text-green-500 uppercase italic mb-6">${t.name}</h4>
-                        <p class="text-2xl text-gray-300 italic font-semibold max-w-2xl">"${t.text}"</p>
-                    </div>
-                </div>
-            `;
-        });
+                    <section id="curso" className="py-32 px-8 bg-black/40 border-y-2 border-green-500/10">
+                        <div className="max-w-7xl mx-auto">
+                            <h2 className="text-5xl font-orbitron font-black mb-16 uppercase tracking-tighter italic text-center">Grade <span className="text-neon">Acadêmica</span></h2>
+                            <div className="grid md:grid-cols-3 gap-8">
+                                {MODULES.map(m => (
+                                    <div key={m.id} className="bg-neutral-900/50 border border-green-500/30 p-8 rounded-2xl hover:border-green-400 transition-all group backdrop-blur-sm text-left">
+                                        <div className="flex items-center gap-4 mb-6">
+                                            <div className="w-14 h-14 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500 font-bold text-2xl font-orbitron border border-green-500/20">{m.id}</div>
+                                            <h3 className="text-2xl font-black font-orbitron group-hover:text-neon uppercase italic tracking-tighter">{m.title}</h3>
+                                        </div>
+                                        <p className="text-gray-400 mb-8 font-medium">{m.desc}</p>
+                                        <ul className="space-y-4 mb-8">
+                                            {m.topics.map((t, idx) => (
+                                                <li key={idx} className="flex items-center gap-3 text-sm text-gray-300 font-semibold"><span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,1)]"></span>{t}</li>
+                                            ))}
+                                        </ul>
+                                        <button onClick={window.startEnroll} className="w-full py-3 bg-transparent border-2 border-green-600 text-green-500 hover:bg-green-600 hover:text-black font-black rounded-xl transition-all font-orbitron italic uppercase text-xs tracking-widest">Acessar Módulo</button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
 
-        // Azmuth Chat Logic
-        const API_KEY = ""; // Injected automatically from process.env.API_KEY
-        window.sendMessage = async () => {
-            const input = document.getElementById('chat-input');
-            const messages = document.getElementById('chat-messages');
-            const text = input.value.trim();
-            if (!text) return;
+                    <section id="depoimentos" className="py-32 px-8 relative bg-black/20">
+                        <div className="max-w-7xl mx-auto">
+                            <h2 className="text-5xl font-orbitron font-black mb-24 uppercase tracking-tighter italic text-center">Relatórios de <span className="text-neon">Agentes</span></h2>
+                            <div className="flex flex-col gap-24">
+                                {TESTIMONIALS.map(t => (
+                                    <div key={t.id} className="group relative max-w-4xl mx-auto w-full">
+                                        <div className="relative bg-neutral-900/80 border-2 border-green-500/20 p-10 md:p-16 rounded-[3rem] transition-all flex flex-col items-center shadow-3xl backdrop-blur-xl hover:border-green-500/50">
+                                            <div className="w-full mb-12 rounded-3xl overflow-hidden border-4 border-green-500/20 shadow-2xl bg-black flex items-center justify-center">
+                                                <img src={t.img} className="w-full h-auto block transform group-hover:scale-110 transition-transform duration-[3s]" />
+                                            </div>
+                                            <div className="text-center">
+                                                <h4 className="font-orbitron font-black text-3xl text-green-500 uppercase italic mb-6">{t.name}</h4>
+                                                <p className="text-2xl text-gray-300 italic font-semibold max-w-2xl">"{t.text}"</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
 
-            input.value = '';
-            messages.innerHTML += `<div class="flex justify-end"><div class="bg-neutral-800 text-white p-3 rounded-lg text-sm border-l-4 border-green-500">${text}</div></div>`;
-            messages.scrollTop = messages.scrollHeight;
-
-            try {
-                const ai = new GoogleGenAI({ apiKey: API_KEY });
-                const response = await ai.models.generateContent({
-                    model: 'gemini-3-flash-preview',
-                    contents: text,
-                    config: {
-                        systemInstruction: "Você é Azmuth, o criador do Omnitrix. Você é brilhante, impaciente mas ensina recrutas Encanadores. Responda em português, use termos do universo Ben 10 e seja um pouco arrogante porém útil.",
-                    }
-                });
-                const reply = response.text;
-                messages.innerHTML += `<div class="flex justify-start"><div class="bg-green-900/40 text-green-100 p-3 rounded-lg text-sm border-r-4 border-green-600 italic">"${reply}"</div></div>`;
-                messages.scrollTop = messages.scrollHeight;
-            } catch (err) {
-                messages.innerHTML += `<div class="flex justify-start text-red-500 text-xs italic">A conexão galáctica falhou. Tente novamente.</div>`;
-            }
+                    <section id="certificado" className="py-32 px-8 bg-gradient-to-t from-green-900/30 to-transparent">
+                        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-20 items-center">
+                            <div className="text-left">
+                                <h2 className="text-5xl font-orbitron font-black mb-8 uppercase tracking-tighter italic leading-tight">Mestre do <br/><span className="text-neon">Omnitrix</span></h2>
+                                <p className="text-gray-300 text-xl mb-12 leading-relaxed font-medium italic">Certificação oficial válida em todos os quadrantes da Federação Galáctica. Assinatura molecular inclusiva.</p>
+                                <div className="space-y-6">
+                                    <div className="flex items-center gap-6 bg-black/60 p-6 rounded-2xl border-l-8 border-green-500 shadow-xl"><div className="text-green-500 text-3xl">✔</div><span className="font-black font-orbitron text-sm tracking-widest italic uppercase">Código de DNA Verificado</span></div>
+                                    <div className="flex items-center gap-6 bg-black/60 p-6 rounded-2xl border-l-8 border-green-500 shadow-xl"><div class="text-green-500 text-3xl">✔</div><span class="font-black font-orbitron text-sm tracking-widest italic uppercase">Protocolo de Paz Ativo</span></div>
+                                </div>
+                            </div>
+                            <div className="relative group cursor-pointer" onClick={window.downloadCert}>
+                                <div className="absolute -inset-6 bg-green-500/30 blur-[60px] opacity-0 group-hover:opacity-100 transition duration-700"></div>
+                                <div className="relative bg-neutral-900 border-8 border-green-500/50 p-6 rounded-[2rem] shadow-2xl transform transition-transform group-hover:rotate-2 group-hover:scale-105">
+                                    <img src="https://pt.quizur.com/_image?href=https%3A%2F%2Fdev-beta.quizur.com%2Fstorage%2Fv1%2Fobject%2Fpublic%2F%2Fimagens%2F%2F20146386%2F750a8375-7e7a-49a4-b92d-1829733bb9f7.png&w=600&h=600&f=webp" class="w-full rounded-xl" />
+                                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
+                                        <span className="text-green-500 font-orbitron font-black text-2xl uppercase italic drop-shadow-lg">BAIXAR ARQUIVO</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </>
+            );
         };
 
-        document.getElementById('chat-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<Page />);
+
+        const chatRoot = ReactDOM.createRoot(document.getElementById('chat-root'));
+        chatRoot.render(<AzmuthChat />);
     </script>
 </body>
 </html>
