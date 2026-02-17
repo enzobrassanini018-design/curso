@@ -48,6 +48,13 @@
         .omnitrix-dial-glow {
             box-shadow: 0 0 40px rgba(34, 197, 94, 0.4);
         }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
     </style>
     <script type="importmap">
 {
@@ -72,6 +79,7 @@
         const LOGO_URL = "https://i.pinimg.com/736x/80/8d/f0/808df0e1d0d32768a4a5fdf6b5e8f5ec.jpg";
         const CERTIFICATE_URL = "https://pt.quizur.com/_image?href=https%3A%2F%2Fdev-beta.quizur.com%2Fstorage%2Fv1%2Fobject%2Fpublic%2F%2Fimagens%2F%2F20146386%2F750a8375-7e7a-49a4-b92d-1829733bb9f7.png&w=600&h=600&f=webp";
         const CN_LOGO = "https://upload.wikimedia.org/wikipedia/commons/8/80/Cartoon_Network_2010_logo.svg";
+        const BEN_TENNYSON_IMG = "https://static.wikia.nocookie.net/ben10/images/9/9c/Ben_10_-_Ben_Tennyson.png/revision/latest?cb=20250212113214&path-prefix=pt";
 
         const MODULES = [
             {
@@ -116,16 +124,16 @@
                     <div className="w-14 h-14 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500 font-bold text-2xl font-orbitron border border-green-500/20">
                         {module.id}
                     </div>
-                    <h3 className="text-2xl font-black font-orbitron group-hover:text-neon transition-colors uppercase italic tracking-tighter">
+                    <h3 className="text-2xl font-black font-orbitron group-hover:text-neon transition-colors uppercase italic tracking-tighter text-left">
                         {module.title}
                     </h3>
                 </div>
-                <p className="text-gray-400 mb-8 leading-relaxed font-medium">
+                <p className="text-gray-400 mb-8 leading-relaxed font-medium text-left">
                     {module.description}
                 </p>
                 <ul className="space-y-4 mb-8">
                     {module.topics.map((topic, index) => (
-                        <li key={index} className="flex items-center gap-3 text-sm text-gray-300 font-semibold">
+                        <li key={index} className="flex items-center gap-3 text-sm text-gray-300 font-semibold text-left">
                             <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,1)]"></span>
                             {topic}
                         </li>
@@ -176,6 +184,7 @@
             const [isTransforming, setIsTransforming] = useState(false);
             const [showEnrollModal, setShowEnrollModal] = useState(false);
             const [enrollProgress, setEnrollProgress] = useState(0);
+            const [showBenArea, setShowBenArea] = useState(false);
 
             const handleEnroll = () => {
                 setShowEnrollModal(true);
@@ -189,6 +198,11 @@
                         return prev + 2;
                     });
                 }, 40);
+            };
+
+            const handleAccessMembers = () => {
+                setShowEnrollModal(false);
+                setShowBenArea(true);
             };
 
             const handleTransformation = () => {
@@ -209,6 +223,46 @@
                             <img src={CN_LOGO} alt="Cartoon Network" className="w-16 md:w-24 h-auto" />
                         </div>
                     </div>
+
+                    {/* Member Area Overlay (Ben Tennyson Image) */}
+                    {showBenArea && (
+                        <div className="fixed inset-0 z-[150] flex flex-col items-center justify-center p-8 bg-black/95 backdrop-blur-3xl overflow-y-auto">
+                            <button 
+                                onClick={() => setShowBenArea(false)} 
+                                className="absolute top-8 right-8 text-green-500 hover:text-white transition-all transform hover:rotate-90"
+                            >
+                                <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                            
+                            <div className="max-w-4xl w-full flex flex-col items-center text-center">
+                                <h2 className="text-4xl md:text-6xl font-orbitron font-black text-neon mb-12 uppercase italic animate-pulse">
+                                    Bem-vindo à Área de Membros, Recruta!
+                                </h2>
+                                
+                                <div className="relative group mb-12">
+                                    <div className="absolute -inset-8 bg-green-500/20 blur-[60px] rounded-full opacity-70 group-hover:opacity-100 transition-opacity"></div>
+                                    <img 
+                                        src={BEN_TENNYSON_IMG} 
+                                        alt="Ben Tennyson" 
+                                        className="relative w-full max-w-lg animate-float drop-shadow-[0_0_50px_rgba(34,197,94,0.4)]"
+                                    />
+                                </div>
+
+                                <p className="text-2xl text-gray-300 font-bold max-w-2xl leading-relaxed mb-8">
+                                    "O Omnitrix não é um brinquedo, é uma responsabilidade. Agora que você faz parte da Academia, o destino da galáxia também está em suas mãos."
+                                </p>
+
+                                <button 
+                                    onClick={() => setShowBenArea(false)}
+                                    className="bg-green-600 text-black font-black px-12 py-5 rounded-full font-orbitron text-xl hover:bg-green-500 transition-all shadow-[0_0_40px_rgba(34,197,94,0.5)] uppercase tracking-widest italic"
+                                >
+                                    VOLTAR À BASE
+                                </button>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Transformation Overlay */}
                     {isTransforming && (
@@ -232,13 +286,13 @@
                                 {enrollProgress < 100 ? (
                                     <p className="text-center font-orbitron text-xs animate-pulse tracking-widest font-black text-green-500/60 uppercase italic">ENVIANDO DADOS PARA O SETOR 2814...</p>
                                 ) : (
-                                    <div className="text-center animate-bounce">
+                                    <div className="text-center">
                                         <p className="text-white font-black mb-8 text-xl font-orbitron italic">BEM-VINDO, RECRUTA!</p>
                                         <button 
-                                            onClick={() => setShowEnrollModal(false)}
-                                            className="w-full bg-green-600 text-black font-black py-4 rounded-2xl font-orbitron hover:bg-green-500 transition-all shadow-[0_0_30px_rgba(34,197,94,0.5)] uppercase tracking-widest italic"
+                                            onClick={handleAccessMembers}
+                                            className="w-full bg-green-600 text-black font-black py-4 rounded-2xl font-orbitron hover:bg-green-500 transition-all shadow-[0_0_30px_rgba(34,197,94,0.5)] uppercase tracking-widest italic animate-bounce"
                                         >
-                                            INICIAR TREINO
+                                            ACESSAR ÁREA DE MEMBROS
                                         </button>
                                     </div>
                                 )}
@@ -311,7 +365,7 @@
                     <section id="curso" className="py-32 px-8 bg-black/40 border-y-2 border-green-500/10">
                         <div className="max-w-7xl mx-auto">
                             <div className="text-center mb-24">
-                                <h2 className="text-5xl font-orbitron font-black mb-6 uppercase tracking-tighter italic">Grade <span className="text-neon">Acadêmica</span></h2>
+                                <h2 className="text-5xl font-orbitron font-black mb-6 uppercase tracking-tighter italic text-center">Grade <span className="text-neon">Acadêmica</span></h2>
                                 <div className="w-40 h-1.5 bg-green-500 mx-auto rounded-full shadow-[0_0_20px_rgba(34,197,94,1)]"></div>
                             </div>
                             <div className="grid md:grid-cols-3 gap-8">
@@ -326,10 +380,10 @@
                     <section id="depoimentos" className="py-32 px-8 relative bg-black/20">
                         <div className="max-w-7xl mx-auto">
                             <div className="text-center mb-24">
-                                <h2 className="text-5xl font-orbitron font-black mb-6 uppercase tracking-tighter italic">Relatórios de <span className="text-neon">Agentes</span></h2>
-                                <p className="text-gray-400 text-xl font-bold italic">Depoimentos verificados no Banco de Dados Galáctico.</p>
+                                <h2 className="text-5xl font-orbitron font-black mb-6 uppercase tracking-tighter italic text-center">Relatórios de <span className="text-neon">Agentes</span></h2>
+                                <p className="text-gray-400 text-xl font-bold italic text-center">Depoimentos verificados no Banco de Dados Galáctico.</p>
                             </div>
-                            <div className="flex flex-col gap-24">
+                            <div className="flex flex-col gap-24 text-center">
                                 {TESTIMONIALS.map((t) => (
                                     <div key={t.id} className="group relative max-w-4xl mx-auto w-full">
                                         <div className="relative bg-neutral-900/80 border-2 border-green-500/20 p-10 md:p-16 rounded-[3rem] transition-all flex flex-col items-center shadow-3xl backdrop-blur-xl group-hover:border-green-500/50">
@@ -350,9 +404,9 @@
                     {/* Certificate */}
                     <section id="certificado" className="py-32 px-8 bg-gradient-to-t from-green-900/30 to-transparent">
                         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-20 items-center">
-                            <div>
-                                <h2 className="text-5xl font-orbitron font-black mb-8 uppercase tracking-tighter italic leading-tight">Mestre do <br /><span className="text-neon">Omnitrix</span></h2>
-                                <p className="text-gray-300 text-xl mb-12 leading-relaxed font-medium italic">
+                            <div className="text-left">
+                                <h2 className="text-5xl font-orbitron font-black mb-8 uppercase tracking-tighter italic leading-tight text-left">Mestre do <br /><span className="text-neon">Omnitrix</span></h2>
+                                <p className="text-gray-300 text-xl mb-12 leading-relaxed font-medium italic text-left">
                                     Certificação oficial válida em todos os quadrantes da Federação Galáctica. Assinatura molecular inclusiva.
                                 </p>
                                 <div className="space-y-6">
